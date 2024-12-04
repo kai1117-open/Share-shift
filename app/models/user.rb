@@ -24,5 +24,7 @@ class User < ApplicationRecord
     train: 3      # 電車
   }
 
+  # 役職メニュー
+  enum role: { part_time: 0, part: 1, employee: 2 }
 
 end
