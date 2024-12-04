@@ -1,0 +1,29 @@
+<h1>新規投稿</h1>
+
+<%= form_with model: @post, url: public_posts_path, local: true do |form| %>
+  <% if @post.errors.any? %>
+    <div>
+      <h2>エラーがあります</h2>
+      <ul>
+        <% @post.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :content %>
+    <%= form.text_area :content %>
+  </div>
+
+  <%= form.submit '投稿する' %>
+<% end %>
+
+<%= link_to '戻る', public_posts_path %>
+
