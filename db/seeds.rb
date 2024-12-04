@@ -14,6 +14,7 @@ admin_user = Admin.create!(
 
 # 一般ユーザーの作成
 user1 = User.create!(
+  name: 'テスト太郎',
   email: 'user1@example.com',
   password: 'password123',
   password_confirmation: 'password123',
@@ -24,6 +25,7 @@ user1 = User.create!(
 )
 
 user2 = User.create!(
+  name: 'テスト山田',
   email: 'user2@example.com',
   password: 'password123',
   password_confirmation: 'password123',

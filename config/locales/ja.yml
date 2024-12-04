@@ -1,0 +1,9 @@
+ja:
+  activerecord:
+    attributes:
+      user:
+        transportation:
+          car: "車"
+          bus: "バス"
+          bicycle: "自転車"
+          walking: "徒歩"

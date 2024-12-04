@@ -1,8 +1,20 @@
 Rails.application.routes.draw do
 
+  namespace :public do
+    resources :users, only: [:index, :show, :edit, :update]
+    resources :posts do
+      collection do
+        get 'search'
+      end
+    end
+  end
+
+
   root to: 'homes#top' # トップページをルートに設定
   get 'about', to: 'homes#about', as: 'about' # Aboutページのルートを設定
   
+
+
 # 顧客用
 # URL /customers/sign_in ...
 devise_for :users,skip: [:passwords], controllers: {
