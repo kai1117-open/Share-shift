@@ -1,0 +1,24 @@
+<div class="container mt-5">
+  <h1 class="text-center mb-4">投稿一覧</h1>
+
+  <div class="d-flex justify-content-between mb-4">
+    <%= link_to '投稿検索', search_public_posts_path, class: 'btn btn-info' %>
+    <%= link_to '新規投稿', new_public_post_path, class: 'btn btn-primary' %>
+  </div>
+
+  <% @posts.each do |post| %>
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <h2 class="card-title">
+          <%= link_to post.title, public_post_path(post), class: 'text-decoration-none text-dark' %>
+        </h2>
+        <p class="card-text"><%= post.content.truncate(100) %></p>
+        
+        <div class="d-flex justify-content-between">
+          <%= link_to '編集', edit_public_post_path(post), class: 'btn btn-warning btn-sm' %>
+          <%= link_to '削除', public_post_path(post), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger btn-sm' %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

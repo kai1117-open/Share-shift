@@ -5,12 +5,40 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <script src="https://kit.fontawesome.com/d0cea1656a.js" crossorigin="anonymous"></script>
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <style>
+      /* ページ全体を最小の高さ100vhにして、コンテンツの高さに関係なくフッターを下部に固定 */
+      html, body {
+        height: 100%;
+        margin: 0;
+      }
+
+      .content {
+        min-height: 100%;
+        padding-bottom: 50px; /* フッターの高さ分の余白 */
+      }
+
+      footer {
+        position: relative;
+        bottom: 0;
+        width: 100%;
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 20px 0;
+      }
+    </style>
   </head>
- 
   <body>
-    <%= yield %>
+    <%= render 'layouts/header' %>
+    <div class="content">
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
+      <%= yield %>
+    </div>
+    <%= render 'layouts/footer' %>
   </body>
 </html>

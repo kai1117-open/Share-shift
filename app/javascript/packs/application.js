@@ -7,6 +7,15 @@ import Rails from "@rails/ujs"
 import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
+import './calendar'; // 追加
+
+
+import "jquery";
+import "popper.js";
+import "bootstrap";
+import "../stylesheets/application"; 
+import "@popperjs/core";
+import 'bootstrap/dist/css/bootstrap.css';
 
 Rails.start()
 Turbolinks.start()

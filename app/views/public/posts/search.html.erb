@@ -1,0 +1,32 @@
+<div class="container mt-5">
+  <h1 class="text-center mb-4">投稿検索</h1>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <%= form_with url: search_public_posts_path, method: :get, local: true do |form| %>
+        <div class="mb-3">
+          <%= form.label :query, '検索キーワード', class: 'form-label' %>
+          <%= form.text_field :query, value: params[:query], placeholder: 'タイトルまたは内容で検索', class: 'form-control' %>
+        </div>
+        <div class="d-flex justify-content-end">
+          <%= form.submit '検索', class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <h2 class="mt-4">検索結果</h2>
+
+  <% if @posts.any? %>
+    <ul class="list-group">
+      <% @posts.each do |post| %>
+        <li class="list-group-item">
+          <%= link_to post.title, public_post_path(post), class: 'text-decoration-none text-dark' %> 
+          - <small class="text-muted"><%= post.created_at.strftime('%Y-%m-%d') %></small>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>検索結果はありませんでした。</p>
+  <% end %>
+</div>
