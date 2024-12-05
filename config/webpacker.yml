@@ -1,5 +1,3 @@
-# Note: You must restart bin/webpack-dev-server for changes to take effect
-
 default: &default
   source_path: app/javascript
   source_entry_path: packs
@@ -8,9 +6,8 @@ default: &default
   cache_path: tmp/cache/webpacker
   webpack_compile_output: true
 
-  # Additional paths webpack should lookup modules
-  # ['app/assets', 'engine/foo/app/assets']
-  additional_paths: []
+  # 追加のパス webpackがモジュールを検索する場所
+  additional_paths: [] # 空のままでOK
 
   # Reload manifest.json on all requests so we reload latest compiled packs
   cache_manifest: false
@@ -70,7 +67,6 @@ development:
       'Access-Control-Allow-Origin': '*'
     watch_options:
       ignored: '**/node_modules/**'
-
 
 test:
   <<: *default
