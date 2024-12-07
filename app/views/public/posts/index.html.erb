@@ -15,8 +15,10 @@
         <p class="card-text"><%= post.content.truncate(100) %></p>
         
         <div class="d-flex justify-content-between">
+        <% if current_user == post.user %>
           <%= link_to '編集', edit_public_post_path(post), class: 'btn btn-warning btn-sm' %>
           <%= link_to '削除', public_post_path(post), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger btn-sm' %>
+        <% end %>
         </div>
       </div>
     </div>

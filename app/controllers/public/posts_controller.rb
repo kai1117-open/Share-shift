@@ -1,5 +1,7 @@
 class Public::PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:show, :index] 
+  before_action :authorize_user, only: [:edit, :update, :destroy]  # ここで認可処理を追加
 
   # 新規投稿入力フォーム
   def new
@@ -40,13 +42,12 @@ class Public::PostsController < ApplicationController
 
   # 投稿削除処理
   def destroy
-    @post.destroy
+    @post.destroy  # ここでset_postで設定された@postを使います
     redirect_to public_posts_path, notice: '投稿が削除されました。'
   end
 
   # 投稿検索
   def search
-    # params[:query] で検索キーワードを取得
     if params[:query].present?
       @posts = Post.where('title LIKE ? OR content LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
     else
@@ -64,5 +65,13 @@ class Public::PostsController < ApplicationController
   # 投稿パラメーターの強いパラメーター
   def post_params
     params.require(:post).permit(:title, :content)
+  end
+
+  # ユーザーの認可
+  def authorize_user
+    # 現在のユーザーが投稿の所有者でない場合、アクセスを拒否
+    unless @post.user == current_user
+      redirect_to public_posts_path, alert: 'この投稿を編集する権限がありません。'
+    end
   end
 end
