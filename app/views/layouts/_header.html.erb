@@ -7,6 +7,17 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
+        <% if admin_signed_in? %>
+            <li class="nav-item">
+              <%= link_to '投稿一覧', admin_posts_path, class: 'nav-link' %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'ユーザー管理', admin_users_path, class: 'nav-link' %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'ログアウト', destroy_admin_session_path, method: :delete, class: 'nav-link' %>
+            </li>
+        <% else %>
           <li class="nav-item">
             <%= link_to 'トップページ', root_path, class: 'nav-link' %>
           </li>
@@ -28,6 +39,7 @@
               <%= link_to 'ログイン', new_user_session_path, class: 'nav-link' %>
             </li>
           <% end %>
+        <% end %>
         </ul>
       </div>
     </div>

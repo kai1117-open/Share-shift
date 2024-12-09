@@ -1,0 +1,29 @@
+<div class="container mt-4">
+  <h1 class="text-center">ユーザー一覧</h1>
+
+  <table class="table table-bordered mt-4">
+    <thead>
+      <tr>
+        <th>名前</th>
+        <th>メールアドレス</th>
+        <th class="text-center">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= user.name %></td>
+          <td><%= user.email %></td>
+          <td class="text-center">
+            <%= link_to '詳細', admin_user_path(user), class: 'btn btn-info btn-sm' %>
+            <%= link_to '編集', edit_admin_user_path(user), class: 'btn btn-warning btn-sm' %>
+            <%= link_to '削除', admin_user_path(user), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger btn-sm' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="text-end">
+  <%= link_to '戻る', admin_homes_path, class: 'btn btn-secondary' %>
+  </div>
+</div>
