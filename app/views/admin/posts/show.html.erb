@@ -1,0 +1,16 @@
+<div class="container mt-4">
+  <h1 class="text-center">タイトル：<%= @post.title %></h1>
+
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <p><strong>著者:</strong> <%= @post.user.name %></p>
+      <p><strong>内容:</strong> <%= @post.content %></p>
+
+      <div class="text-center mt-4">
+        <%= link_to '編集', edit_admin_post_path(@post), class: 'btn btn-warning btn-sm' %>
+        <span>|</span>
+        <%= link_to '戻る', admin_posts_path, class: 'btn btn-secondary btn-sm' %>
+      </div>
+    </div>
+  </div>
+</div>

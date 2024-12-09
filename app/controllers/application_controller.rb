@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
-  # devise_controller? の場合のみ実行
+
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :authenticate_admin!, if: :admin_controller?
   # ユーザーの退会状態を確認
   before_action :check_user_status
 
@@ -8,9 +9,20 @@ class ApplicationController < ActionController::Base
     public_posts_path
   end
 
+  def after_sign_in_path_for(resource)
+    if resource.is_a?(Admin)
+      admin_homes_path
+    else
+      public_posts_path
+    end
+  end
+
+
+
   def after_sign_out_path_for(resource)
     about_path
   end
+
 
   private
 
@@ -19,6 +31,10 @@ class ApplicationController < ActionController::Base
       sign_out current_user
       redirect_to new_user_session_path, alert: '退会済みのためログインできません。'
     end
+  end
+
+  def admin_controller?
+    controller_path.start_with?('admin')
   end
 
   protected
