@@ -9,6 +9,7 @@ class Admin::PostsController < ApplicationController
   # 投稿詳細
   def show
     @post = Post.find(params[:id])
+    @post_comments = @post.post_comments
   end
 
   # 投稿編集フォーム
@@ -34,6 +35,11 @@ class Admin::PostsController < ApplicationController
   end
 
   private
+
+  def set_post
+    @post = Post.find(params[:id])
+  end
+
 
   def post_params
     params.require(:post).permit(:title, :content, :author)  # 必要なパラメータを追加
