@@ -1,0 +1,31 @@
+<div class="container mt-4">
+  <h1 class="text-center">投稿一覧</h1>
+
+  <table class="table table-bordered mt-4">
+    <thead>
+      <tr>
+        <th>タイトル</th>
+        <th>内容</th>
+        <th>投稿者</th>
+        <th class="text-center">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @posts.each do |post| %>
+        <tr>
+          <td><%= post.title %></td>
+          <td><%= truncate(post.content, length: 50) %></td> <!-- 内容が長い場合は50文字に制限 -->
+          <td><%= post.user.name %></td>
+          <td class="text-center">
+            <%= link_to '詳細', admin_post_path(post), class: 'btn btn-info btn-sm' %>
+            <%= link_to '編集', edit_admin_post_path(post), class: 'btn btn-warning btn-sm' %>
+            <%= link_to '削除', admin_post_path(post), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger btn-sm' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="text-end">
+  <%= link_to '戻る', admin_homes_path, class: 'btn btn-secondary' %>
+  </div>
+</div>

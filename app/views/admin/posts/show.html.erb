@@ -1,0 +1,40 @@
+<div class="container mt-4">
+  <h1 class="text-center">タイトル：<%= @post.title %></h1>
+
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <p><strong>著者:</strong> <%= @post.user.name %></p>
+      <p><strong>内容:</strong> <%= @post.content %></p>
+
+      <div class="text-center mt-4">
+        <%= link_to '編集', edit_admin_post_path(@post), class: 'btn btn-warning btn-sm' %>
+        <span>|</span>
+        <%= link_to '戻る', admin_posts_path, class: 'btn btn-secondary btn-sm' %>
+      </div>
+
+      <!-- コメント表示部分 -->
+      <h3 class="mt-5">コメント一覧</h3>
+      <table class="table mt-3">
+        <thead>
+          <tr>
+            <th>ユーザー名</th>
+            <th>コメント内容</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @post.post_comments.each do |comment| %>
+            <tr>
+              <td><%= comment.user.name %></td>
+              <td><%= comment.content %></td>
+              <td>
+                <%= link_to '編集', edit_admin_post_post_comment_path(@post, comment), class: 'btn btn-warning btn-sm' %>
+                <%= link_to '削除', admin_post_post_comment_path(@post, comment), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger btn-sm' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

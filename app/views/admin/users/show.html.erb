@@ -1,0 +1,17 @@
+<div class="container mt-4">
+  <h1 class="text-center"><%= @user.name %> の詳細</h1>
+
+  <div class="mt-4">
+    <p><strong>メールアドレス:</strong> <%= @user.email %></p>
+    <p><strong>役職:</strong> <%= @user.role %></p>
+    <p><strong>リーダー:</strong> <%= @user.leader ? 'リーダー' : '一般ユーザー' %></p>
+    <p><strong>住所:</strong> <%= @user.address %></p>
+    <p><strong>交通手段:</strong> <%= @user.transportation %></p>
+    <p><strong>入会状況:</strong> <%= @user.status ? '入会中' : '退会済み' %></p>
+  </div>
+
+  <div class="text-center mt-4">
+    <%= link_to '編集', edit_admin_user_path(@user), class: 'btn btn-warning btn-sm' %> |
+    <%= link_to '戻る', admin_users_path, class: 'btn btn-secondary btn-sm' %>
+  </div>
+</div>
