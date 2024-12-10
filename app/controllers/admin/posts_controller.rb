@@ -45,3 +45,4 @@ class Admin::PostsController < ApplicationController
     params.require(:post).permit(:title, :content, :author)  # 必要なパラメータを追加
   end
 end
+ 
