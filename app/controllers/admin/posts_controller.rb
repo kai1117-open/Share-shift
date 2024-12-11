@@ -3,7 +3,13 @@ class Admin::PostsController < ApplicationController
 
   # 投稿一覧
   def index
-    @posts = Post.all
+    if params[:q].present?
+      # 検索クエリがある場合、タイトルと内容で検索
+      @posts = Post.where('title LIKE ? OR content LIKE ?', "%#{params[:q]}%", "%#{params[:q]}%")
+    else
+      # 検索クエリがない場合、すべての投稿を表示
+      @posts = Post.all
+    end
   end
 
   # 投稿詳細
@@ -40,9 +46,7 @@ class Admin::PostsController < ApplicationController
     @post = Post.find(params[:id])
   end
 
-
   def post_params
     params.require(:post).permit(:title, :content, :author)  # 必要なパラメータを追加
   end
 end
- 

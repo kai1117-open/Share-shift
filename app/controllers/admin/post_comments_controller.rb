@@ -5,23 +5,18 @@ class Admin::PostCommentsController < ApplicationController
 
   # コメント一覧
   def index
-    # 全てのコメントを取得
-    @post_comments = PostComment.all
-
-    # 検索があればそれに基づいてコメントを絞り込む
     if params[:q].present?
+      # 検索クエリがある場合、コメント内容で検索
       @post_comments = PostComment.where('content LIKE ?', "%#{params[:q]}%")
-    end
-  end
-
-  # コメント検索
-  def search
-    if params[:q].present?
-      @post_comments = PostComment.where("content LIKE ?", "%#{params[:q]}%")
     else
+      # 検索クエリがない場合、すべてのコメントを表示
       @post_comments = PostComment.all
     end
   end
+
+
+
+
 
   # コメント編集フォーム
   def edit

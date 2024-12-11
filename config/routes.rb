@@ -20,9 +20,6 @@ Rails.application.routes.draw do
     # 投稿管理（コメント管理をネスト）
     resources :posts, except: [:new, :create] do
       resources :post_comments, only: [:index, :destroy, :edit, :update] do
-        collection do
-          get 'search'  # コメント検索機能
-        end
       end
     end
   end
