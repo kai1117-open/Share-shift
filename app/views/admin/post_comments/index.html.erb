@@ -1,31 +1,60 @@
-<h1>すべてのコメント一覧</h1>
+<div class="container mt-4">
+  <!-- ページタイトル -->
+  <h1 class="mb-4 text-center">すべてのコメント一覧</h1>
 
-<%= form_with(url: search_admin_post_comments_path, method: :get, local: true) do %>
-  <div class="form-group">
-    <%= label_tag :q, 'コメントを検索' %>
-    <%= text_field_tag :q, params[:q], class: 'form-control' %>
+  <!-- 検索フォーム -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <%= form_with(url: admin_post_comments_path, method: :get, local: true) do %>
+        <div class="form-row align-items-center">
+          <div class="col-sm-8 my-1">
+            <%= label_tag :q, 'コメントを検索', class: 'sr-only' %>
+            <%= text_field_tag :q, params[:q], placeholder: '検索キーワードを入力', class: 'form-control' %>
+          </div>
+          <div class="col-sm-4 my-1">
+            <%= submit_tag '検索', class: 'btn btn-primary btn-block' %>
+          </div>
+        </div>
+      <% end %>
+    </div>
   </div>
-  <%= submit_tag '検索', class: 'btn btn-primary' %>
-<% end %>
-
-<table class="table">
-  <thead>
-    <tr>
-      <th>ユーザー名</th>
-      <th>コメント内容</th>
-      <th>操作</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @post_comments.each do |comment| %>
-      <tr>
-        <td><%= comment.user.name %></td>
-        <td><%= comment.content %></td>
-        <td>
-          <%= link_to '編集', edit_admin_post_post_comment_path(comment.post_id, comment), class: 'btn btn-warning btn-sm' %>
-          <%= button_to '削除', admin_post_comment_path(comment), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger btn-sm' %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+ 
+  <!-- コメント一覧テーブル -->
+  <div class="table-responsive">
+   <% if @post_comments.any? %>
+    <table class="table table-hover table-bordered">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" class="text-center">ユーザー名</th>
+          <th scope="col" class="text-center">コメント内容</th>
+          <th scope="col" class="text-center">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @post_comments.each do |comment| %>
+          <tr>
+            <td class="align-middle text-center"><%= comment.user.name %></td>
+            <td class="align-middle"><%= comment.content %></td>
+            <td class="align-middle text-center">
+              <div class="btn-group" role="group">
+                <%= link_to '編集', edit_admin_post_post_comment_path(comment.post_id, comment), class: 'btn btn-warning btn-sm mr-2' %> | 
+                <%= button_to '削除', admin_post_comment_path(comment), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger btn-sm' %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <div class="text-end">
+    <%= link_to '戻る', admin_homes_path, class: 'btn btn-secondary' %>
+    </div>
+   <% else %>
+    <div class="alert alert-info text-center" role="alert">
+      該当する対象は見つかりませんでした。
+    </div>
+   <% end %>
+  </div>
+  <div class="text-end">
+    <%= link_to '戻る', admin_homes_path, class: 'btn btn-secondary' %>
+  </div>
+</div>

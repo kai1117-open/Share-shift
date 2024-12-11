@@ -1,6 +1,16 @@
 <div class="container mt-4">
   <h1 class="text-center">投稿一覧</h1>
 
+  <!-- 検索フォーム -->
+  <%= form_with(url: admin_posts_path, method: :get, local: true) do %>
+    <div class="form-group">
+      <%= label_tag :q, '検索' %>
+      <%= text_field_tag :q, params[:q], class: 'form-control' %>
+    </div>
+    <%= submit_tag '検索', class: 'btn btn-primary' %>
+  <% end %>
+
+<% if @posts.any? %>
   <table class="table table-bordered mt-4">
     <thead>
       <tr>
@@ -25,7 +35,12 @@
       <% end %>
     </tbody>
   </table>
+<% else %>
+    <div class="alert alert-info text-center" role="alert">
+      該当する対象は見つかりませんでした。
+    </div>
+<% end %>
   <div class="text-end">
-  <%= link_to '戻る', admin_homes_path, class: 'btn btn-secondary' %>
+    <%= link_to '戻る', admin_homes_path, class: 'btn btn-secondary' %>
   </div>
 </div>
