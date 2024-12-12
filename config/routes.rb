@@ -22,6 +22,7 @@ Rails.application.routes.draw do
       resources :post_comments, only: [:index, :destroy, :edit, :update] do
       end
     end
+
   end
 
   # その他のルーティング設定（顧客用やdeviseなど）
@@ -46,6 +47,8 @@ Rails.application.routes.draw do
       end
       resources :post_comments, only: [:create, :destroy]
     end
+
+    resources :chats, only: [:show, :create, :destroy]
 
   end
 
