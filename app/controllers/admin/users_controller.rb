@@ -16,8 +16,20 @@ class Admin::UsersController < ApplicationController
 
   # ユーザー編集フォーム
   def edit
-    @user = User.find(params[:id])
+    @user = User.find_by(id: params[:id])
+
+    if @user.nil?
+      redirect_to admin_users_path, alert: '指定されたユーザーが存在しません。'
+    else
+      @is_leader_in_any_group = user_leader_in_any_group?(@user)
+      @leader_groups = Group.where(leader_id: @user.id)
+    end
   end
+
+  def user_leader_in_any_group?(user)
+    Group.exists?(leader_id: user.id)
+  end
+
 
   # ユーザー情報更新
   def update
@@ -32,8 +44,14 @@ class Admin::UsersController < ApplicationController
   # ユーザー削除
   def destroy
     @user = User.find(params[:id])
-    @user.destroy
-    redirect_to admin_users_path, notice: 'ユーザーを削除しました。'
+  
+    # 対象者がグループリーダーだったら中止させる
+    if @user.leader?
+      redirect_to admin_users_path, alert: 'グループリーダーは削除できません。'
+    else
+      @user.destroy
+      redirect_to admin_users_path, notice: 'ユーザーを削除しました。'
+    end
   end
 
 
@@ -42,7 +60,7 @@ class Admin::UsersController < ApplicationController
 
     # 名前で検索
     if params[:name].present?
-      @users = @users.where("name LIKE ?", "%#{params[:name]}%")
+      @users = @users.where("users.name LIKE ?", "%#{params[:name]}%")
     end
 
     # 役職で検索
@@ -53,6 +71,12 @@ class Admin::UsersController < ApplicationController
     # リーダーで検索
     if params[:leader].present?
       @users = @users.where(leader: params[:leader])
+    end
+
+    # 所属グループで検索
+    if params[:group_name].present?
+      @users = @users.joins(:groups) # グループを結合
+                     .where("groups.name LIKE ?", "%#{params[:group_name]}%")
     end
 
     @users = @users.order(created_at: :desc)  # 作成日順に並べ替え（オプション）

@@ -21,7 +21,7 @@
         <% else %>
           <!-- 相手のメッセージ -->
           <div class="d-flex justify-content-start mb-2">
-            <div class="bg-light p-2 rounded" style="max-width: 70%;">
+            <div class="bg-light text-white p-2 rounded" style="max-width: 70%;">
               <%= chat.message %>
             </div>
           </div>
@@ -39,7 +39,7 @@
         <!-- 送信ボタン -->
         <%= f.submit "送信", class: "btn btn-dark" %>
         <!-- チャットルームIDの隠しフィールド -->
-        <%= f.hidden_field :room_id %>
+        <%= f.hidden_field :room_id, value: @room.id %>
       </div>
     <% end %>
   </div>

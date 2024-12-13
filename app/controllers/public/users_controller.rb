@@ -5,7 +5,14 @@ class Public::UsersController < ApplicationController
 
   # ユーザー一覧
   def index
-    @users = User.all
+    @users = User.includes(:groups) # ユーザーと関連するグループを取得
+
+    # 検索条件があればフィルタリング
+    if params[:search].present?
+      @users = @users.joins(:groups) # グループを結合
+                        .where('users.name LIKE ? OR groups.name LIKE ?', "%#{params[:search]}%", "%#{params[:search]}%")
+                        .distinct # 重複したユーザーを排除
+    end
   end
 
   # ユーザー詳細

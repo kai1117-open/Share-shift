@@ -2,7 +2,18 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :homes, only: [:index]  # 管理者用のホーム画面
-  
+
+    resources :groups do
+      collection do
+        get 'search'  # 管理者用検索ルート
+      end
+      member do
+        # グループからユーザーが退会するルートを定義
+        delete 'leave/:user_id', to: 'groups#leave', as: 'leave_user'
+      end
+    end
+
+
     # ユーザー管理（検索機能を追加）
     resources :users, except: [:new, :create] do
       collection do
@@ -41,6 +52,14 @@ Rails.application.routes.draw do
       post 'withdraw', on: :member
     end
     
+    resources :groups, only: [:index, :show] do
+      collection do
+        get 'search'  # 検索用ルート
+      end
+      post 'join', on: :member  # グループ参加用のルート
+      delete 'leave' , on: :member
+    end
+
     resources :posts do
       collection do
         get 'search'
@@ -48,7 +67,7 @@ Rails.application.routes.draw do
       resources :post_comments, only: [:create, :destroy]
     end
 
-    resources :chats, only: [:show, :create, :destroy]
+    resources :chats, only: [:index, :show, :create, :destroy] 
 
   end
 

@@ -1,0 +1,80 @@
+<div class="container mt-4">
+  <!-- グループ詳細カード -->
+  <div class="card shadow-lg">
+    <div class="card-header text-center">
+      <h1 class="card-title"><%= @group.name %> の詳細</h1>
+    </div>
+    
+    <div class="card-body">
+      <!-- グループ詳細情報 -->
+      <table class="table table-bordered">
+        <tr>
+          <th>グループ名</th>
+          <td><%= @group.name %></td>
+        </tr>
+        <tr>
+          <th>住所</th>
+          <td><%= @group.address %></td>
+        </tr>
+        <tr>
+          <th>リーダー</th>
+          <td><%= @group.leader.name %></td>
+        </tr>
+        <tr>
+          <th>タグ</th>
+          <td><%= @group.tag_id %></td>
+        </tr>
+      </table>
+
+      <!-- 参加者一覧の表示 -->
+      <h2 class="mt-4">参加者一覧</h2>
+      <% if @group.users.any? %>
+        <button class="btn btn-info" id="toggle-participants-btn">参加者を表示</button>
+        <div id="participants-list" style="display:none;">
+          <table class="table table-striped mt-3">
+            <thead>
+              <tr>
+                <th>名前</th>
+                <th>メールアドレス</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @group.users.each do |user| %>
+                <tr>
+                <td><%= link_to user.name, admin_user_path(user), class: 'btn btn-outline-primary' %></td>
+                  <td><%= user.email %></td>
+                  <td>
+                    <%= link_to '退会',  leave_user_admin_group_path(@group, user), method: :delete, data: { confirm: '本当に退会しますか？' }, class: 'btn btn-warning btn-sm' %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <p>参加者はまだいません。</p>
+      <% end %>
+    </div>
+
+    <!-- 編集・戻るボタン -->
+    <div class="card-footer d-flex justify-content-between">
+      <%= link_to '編集', edit_admin_group_path(@group), class: 'btn btn-warning btn-sm' %>
+      <%= link_to '戻る',  request.referer || admin_groups_path, class: 'btn btn-secondary btn-sm' %>
+    </div>
+  </div>
+</div>
+
+<!-- トグルボタンのJavaScript -->
+<script>
+  document.getElementById('toggle-participants-btn').addEventListener('click', function() {
+    var participantsList = document.getElementById('participants-list');
+    if (participantsList.style.display === "none") {
+      participantsList.style.display = "block";
+      this.textContent = "参加者を非表示";
+    } else {
+      participantsList.style.display = "none";
+      this.textContent = "参加者を表示";
+    }
+  });
+</script>
