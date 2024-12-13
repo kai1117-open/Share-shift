@@ -45,6 +45,17 @@
           <th scope="row">入会状況:</th>
           <td><%= @user.status ? '入会中' : '退会済み' %></td>
         </tr>
+        <tr>
+        <th scope="row">リーダー状態のグループ</th>
+          <td>
+          <% leader_groups = Group.where(leader_id: @user.id) %>
+          <% if leader_groups.any? %>
+            <%= leader_groups.map(&:name).join(', ') %> <!-- リーダーになっているグループ名を表示 -->
+          <% else %>
+            なし
+          <% end %>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
