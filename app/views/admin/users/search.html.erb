@@ -1,59 +1,76 @@
 <div class="container mt-4">
-<h1 class="text-center my-4">ユーザー検索</h1>
+  <h1 class="text-center my-4">ユーザー検索</h1>
 
-<%= form_tag(search_admin_users_path, method: :get, class: 'mb-5') do %>
-  <div class="row">
-    <div class="col-md-3">
-      <%= label_tag :name, '名前', class: 'form-label' %>
-      <%= text_field_tag :name, params[:name], class: 'form-control' %>
+  <%= form_tag(search_admin_users_path, method: :get, class: 'mb-5') do %>
+    <div class="row">
+      <div class="col-md-3">
+        <%= label_tag :name, '名前', class: 'form-label' %>
+        <%= text_field_tag :name, params[:name], class: 'form-control' %>
+      </div>
+
+      <div class="col-md-3">
+        <%= label_tag :role, '役職', class: 'form-label' %>
+        <%= select_tag :role, options_for_select(User.roles.keys.map { |role| [role.humanize, role] }, params[:role]), class: 'form-select' %>
+      </div>
+
+      <div class="col-md-3">
+        <%= label_tag :leader, 'リーダー', class: 'form-label' %>
+        <%= select_tag :leader, options_for_select([['選択してください', ''], ['リーダー', true], ['一般ユーザー', false]], params[:leader]), class: 'form-select' %>
+      </div>
+
+      <div class="col-md-3">
+        <%= label_tag :group_name, '所属グループ', class: 'form-label' %>
+        <%= text_field_tag :group_name, params[:group_name], class: 'form-control' %>
+      </div>
+
+      <div class="col-md-3 d-flex align-items-end">
+        <%= submit_tag '検索', class: 'btn btn-primary w-100' %>
+      </div>
     </div>
+  <% end %>
 
-    <div class="col-md-3">
-      <%= label_tag :role, '役職', class: 'form-label' %>
-      <%= select_tag :role, options_for_select(User.roles.keys.map { |role| [role.humanize, role] }, params[:role]), class: 'form-select' %>
-    </div>
+  <h2 class="my-4">検索結果</h2>
 
-    <div class="col-md-3">
-      <%= label_tag :leader, 'リーダー', class: 'form-label' %>
-      <%= select_tag :leader, options_for_select([['選択してください', ''], ['リーダー', true], ['一般ユーザー', false]], params[:leader]), class: 'form-select' %>
-    </div>
-
-    <div class="col-md-3 d-flex align-items-end">
-      <%= submit_tag '検索', class: 'btn btn-primary w-100' %>
-    </div>
-  </div>
-<% end %>
-
-<h2 class="my-4">検索結果</h2>
-
-<% if @users.any? %>
-  <table class="table table-bordered table-striped">
-    <thead>
-      <tr>
-        <th>名前</th>
-        <th>メールアドレス</th>
-        <th>役職</th>
-        <th>リーダー</th>
-        <th class="text-center">操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @users.each do |user| %>
+  <% if @users.any? %>
+    <table class="table table-bordered table-striped">
+      <thead>
         <tr>
-          <td><%= user.name %></td>
-          <td><%= user.email %></td>
-          <td><%= user.role.humanize %></td>
-          <td><%= user.leader ? 'リーダー' : '一般ユーザー' %></td>
-          <td class="text-center">
-            <%= link_to '詳細', admin_user_path(user), class: 'btn btn-info btn-sm' %> 
-            <%= link_to '編集', edit_admin_user_path(user), class: 'btn btn-warning btn-sm' %> 
-            <%= link_to '削除', admin_user_path(user), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger btn-sm' %>
-          </td>
+          <th>名前</th>
+          <th>メールアドレス</th>
+          <th>役職</th>
+          <th>リーダー</th>
+          <th>所属グループ</th>
+          <th class="text-center">操作</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% else %>
-  <p>検索結果はありませんでした。</p>
-<% end %>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= user.name %></td>
+            <td><%= user.email %></td>
+            <td><%= user.role.humanize %></td>
+            <td><%= user.leader ? 'リーダー' : '一般ユーザー' %></td>
+            <td>
+            <% if user.groups.any? %>
+              <ul>
+                <% user.groups.each do |group| %>
+                  <li><%= group.name %></li>
+                <% end %>
+              </ul>
+            <% else %>
+              未登録
+            <% end %>
+          </td>
+            <td class="text-center">
+              <%= link_to '詳細', admin_user_path(user), class: 'btn btn-info btn-sm' %>
+              <%= link_to '編集', edit_admin_user_path(user), class: 'btn btn-warning btn-sm' %>
+              <%= link_to '削除', admin_user_path(user), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger btn-sm' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>検索結果はありませんでした。</p>
+  <% end %>
 </div>

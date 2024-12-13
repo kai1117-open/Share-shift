@@ -5,8 +5,13 @@ class User < ApplicationRecord
 
   validates :name, presence: true
 
+  has_many :led_groups, class_name: 'Group', foreign_key: :leader_id
+  has_many :group_memberships, dependent: :destroy
+  has_many :groups, through: :group_memberships
+
   has_many :posts
   has_many :post_comments, dependent: :destroy
+  
   has_many :user_rooms, dependent: :destroy
   has_many :chats, dependent: :destroy
   has_many :rooms, through: :user_rooms
@@ -17,7 +22,7 @@ class User < ApplicationRecord
 
 
 
-         
+
 
   # リーダー判定メソッド
   def leader?
@@ -28,7 +33,10 @@ class User < ApplicationRecord
   def active?
     self.status
   end
-
+  
+  def user_leader_in_any_group?(user)
+    Group.exists?(leader_id: user.id)
+  end
 
   # 交通手段メニュー
   enum transportation: {

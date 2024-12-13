@@ -1,17 +1,56 @@
 <div class="container mt-4">
-  <h1 class="text-center"><%= @user.name %> の詳細</h1>
+  <h1 class="text-center mb-4"><%= @user.name %> の詳細</h1>
 
-  <div class="mt-4">
-    <p><strong>メールアドレス:</strong> <%= @user.email %></p>
-    <p><strong>役職:</strong> <%= @user.role %></p>
-    <p><strong>リーダー:</strong> <%= @user.leader ? 'リーダー' : '一般ユーザー' %></p>
-    <p><strong>住所:</strong> <%= @user.address %></p>
-    <p><strong>交通手段:</strong> <%= @user.transportation %></p>
-    <p><strong>入会状況:</strong> <%= @user.status ? '入会中' : '退会済み' %></p>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <tbody>
+        <tr>
+          <th scope="row">メールアドレス:</th>
+          <td><%= @user.email %></td>
+        </tr>
+        <tr>
+        <th scope="row">所属店舗:</th>
+        <td>
+        <% if @user.groups.any? %>
+          <ul class="list-inline">
+            <% @user.groups.each do |group| %>
+              <li class="list-inline-item">
+                <%= link_to group.name, admin_group_path(group), class: "btn btn-info" %>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          未登録
+        <% end %>
+      </td>
+      
+        </tr>
+        <tr>
+          <th scope="row">役職:</th>
+          <td><%= @user.role.humanize %></td>
+        </tr>
+        <tr>
+          <th scope="row">リーダー:</th>
+          <td><%= @user.leader ? 'リーダー' : '一般ユーザー' %></td>
+        </tr>
+        <tr>
+          <th scope="row">住所:</th>
+          <td><%= @user.address %></td>
+        </tr>
+        <tr>
+          <th scope="row">交通手段:</th>
+          <td><%= @user.transportation %></td>
+        </tr>
+        <tr>
+          <th scope="row">入会状況:</th>
+          <td><%= @user.status ? '入会中' : '退会済み' %></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
-  <div class="text-center mt-4">
-    <%= link_to '編集', edit_admin_user_path(@user), class: 'btn btn-warning btn-sm' %> |
+  <div class="d-flex justify-content-between mt-4">
+    <%= link_to '編集', edit_admin_user_path(@user), class: 'btn btn-warning btn-sm' %>
     <%= link_to '戻る', admin_users_path, class: 'btn btn-secondary btn-sm' %>
   </div>
 </div>

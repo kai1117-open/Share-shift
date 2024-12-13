@@ -1,0 +1,73 @@
+<div class="container">
+  <div class="card shadow-lg">
+    <div class="card-header text-center">
+    <h1 class="my-4 text-center"><%= @group.name %></h1>
+    </div>
+
+    <div class="card-body">
+      <table class="table table-bordered">
+        <tr>
+          <th>住所</th>
+          <td><%= @group.address %></td>
+        </tr>
+        <tr>
+          <th>リーダー</th>
+          <td><%= @group.leader.name %></td>
+        </tr>
+        <tr>
+          <th>参加状態</th>
+          <td>
+            <% if @group.users.include?(current_user) %>
+              <%= button_to "グループを退会する", leave_public_group_path(@group), method: :delete, class: "btn btn-danger" %>
+            <% else %>
+              <%= button_to "グループに参加する", join_public_group_path(@group), method: :post, class: "btn btn-primary" %>
+            <% end %>
+          </td>
+        </tr>
+      </table>
+
+      <h2 class="my-4">参加者一覧</h2>
+
+      <% if @group.users.any? %>
+        <button class="btn btn-info" id="toggle-participants-btn">参加者を表示</button>
+        <div id="participants-list" style="display:none;">
+          <table class="table table-bordered mt-3">
+            <thead>
+              <tr>
+                <th>参加者名</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @group.users.each do |user| %>
+                <tr>
+                  <td><%= user.name %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <p>参加者はまだいません。</p>
+      <% end %>
+    </div>
+  </div>
+  <div class="text-end">
+    <%= link_to '戻る', public_groups_path, class: 'btn btn-secondary mt-3' %>
+  </div>
+</div>
+
+
+
+<script>
+  document.getElementById('toggle-participants-btn').addEventListener('click', function() {
+    var participantsList = document.getElementById('participants-list');
+    if (participantsList.style.display === "none") {
+      participantsList.style.display = "block";
+      this.textContent = '参加者を隠す';
+    } else {
+      participantsList.style.display = "none";
+      this.textContent = '参加者を表示';
+    }
+  });
+</script>
+
