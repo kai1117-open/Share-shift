@@ -27,9 +27,12 @@
       </table>
 
       <!-- 参加者一覧の表示 -->
-      <h2 class="mt-4">参加者一覧</h2>
       <% if @group.users.any? %>
-        <button class="btn btn-info" id="toggle-participants-btn">参加者を表示</button>
+        <div class="d-flex justify-content-between">
+          <button class="btn btn-info" id="toggle-participants-btn">参加者を表示</button>
+          <%= link_to 'シフト表記', admin_group_events_path(@group), class: 'btn btn-info' %>
+        </div>
+        
         <div id="participants-list" style="display:none;">
           <table class="table table-striped mt-3">
             <thead>
@@ -42,10 +45,10 @@
             <tbody>
               <% @group.users.each do |user| %>
                 <tr>
-                <td><%= link_to user.name, admin_user_path(user), class: 'btn btn-outline-primary' %></td>
+                  <td><%= link_to user.name, admin_user_path(user), class: 'btn btn-outline-primary' %></td>
                   <td><%= user.email %></td>
                   <td>
-                    <%= link_to '退会',  leave_user_admin_group_path(@group, user), method: :delete, data: { confirm: '本当に退会しますか？' }, class: 'btn btn-warning btn-sm' %>
+                    <%= link_to '退会', leave_user_admin_group_path(@group, user), method: :delete, data: { confirm: '本当に退会しますか？' }, class: 'btn btn-warning btn-sm' %>
                   </td>
                 </tr>
               <% end %>
@@ -60,7 +63,7 @@
     <!-- 編集・戻るボタン -->
     <div class="card-footer d-flex justify-content-between">
       <%= link_to '編集', edit_admin_group_path(@group), class: 'btn btn-warning btn-sm' %>
-      <%= link_to '戻る',  request.referer || admin_groups_path, class: 'btn btn-secondary btn-sm' %>
+      <%= link_to '戻る', request.referer || admin_groups_path, class: 'btn btn-secondary btn-sm' %>
     </div>
   </div>
 </div>

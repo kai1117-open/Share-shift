@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  group_id: 1
+  subject: MyString
+  content: MyString
+  sent_at: 2024-12-14 00:24:38
+
+two:
+  group_id: 1
+  subject: MyString
+  content: MyString
+  sent_at: 2024-12-14 00:24:38

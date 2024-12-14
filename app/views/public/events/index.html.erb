@@ -1,0 +1,25 @@
+<div class="container mt-4">
+  <div class="card shadow-lg">
+    <div class="card-header text-center">
+      <h1 class="card-title"><%= @group.name %> のイベント一覧</h1>
+    </div>
+
+    <div class="card-body">
+      <% if @events.any? %>
+        <ul class="list-group">
+          <% @events.each do |event| %>
+            <li class="list-group-item">
+              <%= link_to event.subject, public_group_event_path(@group, event) %>
+              <span class="float-right"><%= event.created_at.strftime("%Y-%m-%d %H:%M") %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>まだイベントがありません。</p>
+      <% end %>
+     <% if @group.leader == current_user %>
+      <%= link_to '新しいイベントを作成する', new_public_group_event_path(@group), class: 'btn btn-primary mt-3' %>
+     <% end %> 
+    </div>
+  </div>
+</div>

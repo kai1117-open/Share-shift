@@ -1,8 +1,12 @@
 Rails.application.routes.draw do
 
+  namespace :public do
+    get 'events/new'
+    get 'events/create'
+  end
   namespace :admin do
     resources :homes, only: [:index]  # 管理者用のホーム画面
-
+    resources :events, only: [:index, :show]
     resources :groups do
       collection do
         get 'search'  # 管理者用検索ルート
@@ -11,6 +15,7 @@ Rails.application.routes.draw do
         # グループからユーザーが退会するルートを定義
         delete 'leave/:user_id', to: 'groups#leave', as: 'leave_user'
       end
+      resources :events, only: [:index]
     end
 
 
@@ -57,7 +62,8 @@ Rails.application.routes.draw do
         get 'search'  # 検索用ルート
       end
       post 'join', on: :member  # グループ参加用のルート
-      delete 'leave' , on: :member
+      delete 'leave', on: :member
+      resources :events, only: [:new, :create, :show, :index]
     end
 
     resources :posts do
