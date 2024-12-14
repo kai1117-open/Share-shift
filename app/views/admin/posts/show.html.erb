@@ -1,16 +1,23 @@
 <div class="container mt-4">
-  <h1 class="text-center">タイトル：<%= @post.title %></h1>
+
 
   <div class="row justify-content-center">
     <div class="col-md-8">
-      <p><strong>著者:</strong> <%= @post.user.name %></p>
-      <p><strong>内容:</strong> <%= @post.content %></p>
-
-      <div class="text-center mt-4">
+      <div class="container mt-4">
+        <div class="card shadow-lg">
+          <div class="card-header text-center">
+            <h1 class="card-title"><%= @post.title %></h1>
+          </div>
+          <div class="card-body">
+            <p><strong>投稿者:</strong> <%= link_to @post.user.name, public_user_path(@post.user), class: 'text-decoration-none text-primary' %></p>
+            <p><strong>内容:</strong> <%= @post.content %></p>
+          </div>
+        <div class="card-footer d-flex justify-content-between">
         <%= link_to '編集', edit_admin_post_path(@post), class: 'btn btn-warning btn-sm' %>
-        <span>|</span>
-        <%= link_to '戻る', admin_posts_path, class: 'btn btn-secondary btn-sm' %>
+        <%= link_to '戻る',  request.referer || admin_posts_path, class: 'btn btn-secondary btn-sm' %>
       </div>
+    </div>
+  </div>
 
       <!-- コメント表示部分 -->
       <h3 class="mt-5">コメント一覧</h3>

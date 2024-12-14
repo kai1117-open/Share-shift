@@ -25,10 +25,29 @@
               <td><%= form.select :role, User.roles.keys.map { |role| [role.humanize, role] }, class: 'form-control' %></td>
             </tr>
 
-            <!-- リーダー選択（ラジオボタン） -->
             <tr>
-              <td><%= form.label :leader, 'リーダー' %></td>
-              <td>
+            <td><%= form.label :leader, 'リーダー' %></td>
+            <td>
+              <% if @is_leader_in_any_group %>
+                <!-- ユーザーがリーダーの場合、ラジオボタンを表示して編集できないようにする -->
+                <div class="form-check form-check-inline">
+                  <%= form.radio_button :leader, true, class: 'form-check-input', disabled: true %>
+                  <%= form.label :leader, 'リーダー', class: 'form-check-label' %>
+                </div>
+                <div class="form-check form-check-inline">
+                  <%= form.radio_button :leader, false, class: 'form-check-input', disabled: true %>
+                  <%= form.label :leader, '一般ユーザー', class: 'form-check-label' %>
+                </div>
+                <div>
+                <% @leader_groups.each do |group| %>
+                  <div class="alert alert-danger mt-2">
+                  <span>リーダーをしている店舗があるため編集できません</span><br>
+                  </div>
+                  <span>リーダーをしている店舗: <%= group.name %></span><br>
+                <% end %>
+              </div>
+              <% else %>
+                <!-- ユーザーがリーダーでない場合、ラジオボタンを編集可能にする -->
                 <div class="form-check form-check-inline">
                   <%= form.radio_button :leader, true, class: 'form-check-input' %>
                   <%= form.label :leader, 'リーダー', class: 'form-check-label' %>
@@ -37,8 +56,9 @@
                   <%= form.radio_button :leader, false, class: 'form-check-input' %>
                   <%= form.label :leader, '一般ユーザー', class: 'form-check-label' %>
                 </div>
-              </td>
-            </tr>
+              <% end %>
+            </td>
+          </tr>
 
             <!-- 住所 -->
             <tr>
@@ -52,10 +72,28 @@
               <td><%= form.select :transportation, User.transportations.keys.map { |transport| [transport.humanize, transport] }, class: 'form-control' %></td>
             </tr>
 
-            <!-- ステータス選択（ラジオボタン） -->
+            <!-- ステータス選択（ラジオボタン）グループリーダー状態は触れないように -->
             <tr>
-              <td><%= form.label :status, 'ステータス' %></td>
-              <td>
+            <td><%= form.label :status, 'ステータス' %></td>
+            <td>
+              <% if @is_leader_in_any_group %>
+                <!-- ユーザーがリーダーの場合、ステータスを表示して編集できないようにする -->
+                <div class="form-check form-check-inline">
+                  <%= form.radio_button :status, true, class: 'form-check-input', disabled: true %>
+                  <%= form.label :status, '入会中', class: 'form-check-label' %>
+                </div>
+                <div class="form-check form-check-inline">
+                  <%= form.radio_button :status, false, class: 'form-check-input', disabled: true %>
+                  <%= form.label :status, '退会済み', class: 'form-check-label' %>
+                </div>
+          
+                <!-- リーダーをしている店舗がある場合のエラーメッセージを赤く表示 -->
+                <div class="alert alert-danger mt-2">
+                  <span>リーダーをしている店舗があるためステータスを変更できません</span>
+                </div>
+                
+              <% else %>
+                <!-- ユーザーがリーダーでない場合、ステータスを編集可能にする -->
                 <div class="form-check form-check-inline">
                   <%= form.radio_button :status, true, class: 'form-check-input' %>
                   <%= form.label :status, '入会中', class: 'form-check-label' %>
@@ -64,18 +102,21 @@
                   <%= form.radio_button :status, false, class: 'form-check-input' %>
                   <%= form.label :status, '退会済み', class: 'form-check-label' %>
                 </div>
-              </td>
-            </tr>
+              <% end %>
+            </td>
+          </tr>
+
+
           </tbody>
         </table>
 
         <!-- ボタンの配置（左右） -->
         <div class="d-flex justify-content-between">
           <div>
-            <%= form.submit '更新', class: 'btn btn-primary' %>
+            <%= form.submit '更新', class: 'btn btn-primary mt-3' %>
           </div>
           <div>
-            <%= link_to '戻る', admin_user_path(@user), class: 'btn btn-secondary' %>
+            <%= link_to '戻る',  request.referer || admin_user_path(@user), class: 'btn btn-secondary mt-3' %>
           </div>
         </div>
       <% end %>
