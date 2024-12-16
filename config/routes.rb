@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+
+
   namespace :public do
     get 'events/new'
     get 'events/create'
@@ -7,6 +9,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :homes, only: [:index]  # 管理者用のホーム画面
     resources :events, only: [:index, :show]
+    resources :group_tags
     resources :groups do
       collection do
         get 'search'  # 管理者用検索ルート
@@ -52,7 +55,7 @@ Rails.application.routes.draw do
   }
 
   namespace :public do
-
+    resources :group_tags, only: [:show]
     resources :users, only: [:index, :show, :edit, :update] do
       post 'withdraw', on: :member
     end

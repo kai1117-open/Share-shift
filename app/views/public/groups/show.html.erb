@@ -15,6 +15,19 @@
           <td><%= @group.leader.name %></td>
         </tr>
         <tr>
+        <th>タグ</th>
+        <td>
+          <% if @group.group_tags.any? %>
+            <% @group.group_tags.each do |tag| %>
+              <%= link_to tag.tag_name, public_group_tag_path(tag), class: 'btn btn-outline-primary btn-sm' %>
+              <% if !@group.group_tags.last.eql?(tag) %> <% end %>
+            <% end %>
+          <% else %>
+            <p>タグはまだありません。</p>
+          <% end %>
+        </td>
+      </tr>
+        <tr>
           <th>参加状態</th>
           <td>
             <% if @group.users.include?(current_user) %>
@@ -44,7 +57,7 @@
             <tbody>
               <% @group.users.each do |user| %>
                 <tr>
-                  <td><%= user.name %></td>
+                  <td><%= link_to user.name, public_user_path(user), class: 'btn btn-outline-primary' %></td>
                 </tr>
               <% end %>
             </tbody>
