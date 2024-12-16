@@ -5,6 +5,22 @@
     </div>
 
     <div class="card-body">
+      <!-- 検索フォーム -->
+      <%= form_tag(admin_events_path, method: :get, class: 'mb-3') do %>
+        <div class="input-group">
+          <%= text_field_tag :search, params[:search], placeholder: 'グループ名で検索', class: 'form-control' %>
+          <div class="input-group-append">
+            <%= submit_tag '検索', class: 'btn btn-primary' %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- ソートリンク -->
+      <div class="mb-3">
+        <%= link_to '送信日時（昇順）', admin_events_path(sort: 'sent_at_asc', search: params[:search]), class: 'btn btn-primary btn-sm' %>
+        <%= link_to '送信日時（降順）', admin_events_path(sort: 'sent_at_desc', search: params[:search]), class: 'btn btn-primary btn-sm' %>
+      </div>
+
       <!-- イベントのテーブル表示 -->
       <% if @events.any? %>
         <table class="table table-bordered table-striped">

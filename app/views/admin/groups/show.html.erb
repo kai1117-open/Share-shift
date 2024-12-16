@@ -22,7 +22,16 @@
         </tr>
         <tr>
           <th>タグ</th>
-          <td><%= @group.tag_id %></td>
+          <td>
+            <% if @group.group_tags.any? %>
+              <% @group.group_tags.each do |tag| %>
+                <%= link_to tag.tag_name, admin_group_tag_path(tag), class: 'btn btn-outline-primary btn-sm' %>
+                <% if !@group.group_tags.last.eql?(tag) %> <% end %>
+              <% end %>
+            <% else %>
+              <p>タグはまだありません。</p>
+            <% end %>
+          </td>
         </tr>
       </table>
 
@@ -48,7 +57,7 @@
                   <td><%= link_to user.name, admin_user_path(user), class: 'btn btn-outline-primary' %></td>
                   <td><%= user.email %></td>
                   <td>
-                    <%= link_to '退会', leave_user_admin_group_path(@group, user), method: :delete, data: { confirm: '本当に退会しますか？' }, class: 'btn btn-warning btn-sm' %>
+                    <%= link_to '退会', leave_user_admin_group_path(@group, user), method: :delete, data: { confirm: '管理者では入会させることはできないので取り消しは困難ですが退会させますか' }, class: 'btn btn-warning btn-sm' %>
                   </td>
                 </tr>
               <% end %>
@@ -63,7 +72,7 @@
     <!-- 編集・戻るボタン -->
     <div class="card-footer d-flex justify-content-between">
       <%= link_to '編集', edit_admin_group_path(@group), class: 'btn btn-warning btn-sm' %>
-      <%= link_to '戻る', request.referer || admin_groups_path, class: 'btn btn-secondary btn-sm' %>
+      <%= link_to '戻る', admin_groups_path, class: 'btn btn-secondary btn-sm' %>
     </div>
   </div>
 </div>

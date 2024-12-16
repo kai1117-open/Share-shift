@@ -5,6 +5,8 @@ class User < ApplicationRecord
 
   validates :name, presence: true
 
+
+
   has_many :led_groups, class_name: 'Group', foreign_key: :leader_id
   has_many :group_memberships, dependent: :destroy
   has_many :groups, through: :group_memberships
@@ -18,6 +20,7 @@ class User < ApplicationRecord
   
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
 
 
 
