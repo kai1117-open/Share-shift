@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_12_16_005109) do
+ActiveRecord::Schema.define(version: 2024_12_16_232851) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -97,6 +97,18 @@ ActiveRecord::Schema.define(version: 2024_12_16_005109) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "shifts", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.datetime "shift_start_time", null: false
+    t.datetime "shift_end_time", null: false
+    t.integer "status"
+    t.string "comment"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index "\"shift_date\"", name: "index_shifts_on_shift_date"
+    t.index ["user_id"], name: "index_shifts_on_user_id"
+  end
+
   create_table "user_rooms", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "room_id", null: false
@@ -132,6 +144,7 @@ ActiveRecord::Schema.define(version: 2024_12_16_005109) do
   add_foreign_key "post_comments", "posts"
   add_foreign_key "post_comments", "users"
   add_foreign_key "posts", "users"
+  add_foreign_key "shifts", "users"
   add_foreign_key "user_rooms", "rooms"
   add_foreign_key "user_rooms", "users"
 end

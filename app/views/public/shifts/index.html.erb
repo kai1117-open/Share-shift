@@ -1,0 +1,283 @@
+<style>
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-gap: 10px;
+  text-align: center;
+}
+
+.calendar-header {
+  font-weight: bold;
+  background-color: #f8f9fa;
+  padding: 10px;
+}
+
+.calendar-day {
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.calendar-day:hover {
+  background-color: #f0f0f0;
+}
+
+.calendar-day.empty {
+  background-color: #f8f9fa;
+}
+
+.today {
+  background-color: #ffcc00;
+  font-weight: bold;
+  border: 2px solid #f50202;  /* 枠線を黒色で2pxの太さに設定 */
+}
+
+/* 出勤不可（赤色） */
+.calendar-day.unavailable {
+  background-color: #ffcccc;
+}
+
+/* 出勤可能（水色） */
+.calendar-day.available {
+  background-color: #ccf2ff;
+}
+
+/* 出勤希望（青色） */
+.calendar-day.desired {
+  background-color: #99ccff;
+}
+
+
+.calendar-day.shifted {
+  background-color: #ccf2ff;
+}
+
+.month-year {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 20px 0;
+}
+</style>
+
+<div class="container mt-5">
+  <h1>シフトカレンダー</h1>
+  <div class="month-year" id="month-year"></div>
+  <button onclick="changeMonth(-1)" class="btn btn-secondary">前月</button>
+  <button onclick="changeMonth(1)" class="btn btn-secondary">次月</button>
+  <div class="calendar mt-4" id="calendar"></div>
+  <div class="text-end">
+    <%= link_to 'マイページへ', public_user_path(current_user.id), class: 'btn btn-secondary' %>
+  </div>
+</div>
+
+<!-- 予定追加モーダル -->
+<div class="modal" tabindex="-1" role="dialog" id="scheduleModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">予定を追加</h5>
+      </div>
+      <div class="modal-body">
+        <form id="scheduleForm" action="/public/users/<%= current_user.id %>/shifts" method="POST">
+          <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+          <div class="form-group">
+            <label for="shiftStartTime">開始時間:</label>
+            <input type="datetime-local" class="form-control" id="shiftStartTime" name="shift[shift_start_time]" required>
+          </div>
+          <div class="form-group">
+            <label for="shiftEndTime">終了時間:</label>
+            <input type="datetime-local" class="form-control" id="shiftEndTime" name="shift[shift_end_time]" required>
+          </div>
+          <div class="form-group">
+            <label for="shiftComment">コメント:</label>
+            <textarea class="form-control" id="shiftComment" name="shift[comment]"></textarea>
+          </div>
+
+          <!-- ステータス選択 -->
+          <div class="form-group">
+            <label for="shiftStatus">ステータス:</label>
+            <select class="form-control" id="shiftStatus" name="shift[status]" required>
+              <option value="unavailable">出勤不可</option>
+              <option value="available">出勤可能</option>
+              <option value="desired">出勤希望</option>
+            </select>
+          </div>
+
+          <input type="hidden" name="shift[user_id]" value="<%= current_user.id %>">
+          
+          <div class="modal-footer d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">保存</button>
+            <!-- 戻るボタン（右端） -->
+            <button type="button" class="btn btn-secondary" onclick="closeModal()">戻る</button>
+          </div>
+        </form>
+
+        <!-- 既存のシフト情報を表示するエリア -->
+        <div id="existingShift" style="display: none;">
+          <h5>既存のシフト</h5>
+          <p id="shiftDetails"></p>
+          
+          <div class="modal-footer d-flex justify-content-between">
+            <% if @shift.present? %>
+              <%= link_to '詳細へ', public_user_shift_path(@user.id, @shift.id), class: 'btn btn-secondary' %>
+            <% else %>
+            <% end %>
+
+            <!-- 戻るボタン（右端） -->
+            <button type="button" class="btn btn-secondary ml-2" onclick="closeModal()">戻る</button>
+
+            <!-- 編集ボタン（黄色） -->
+            <% if @shift.present? %>
+              <%= link_to '編集', edit_public_user_shift_path(@user.id, @shift.id), class: 'btn btn-warning' %>
+            <% else %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// 現在の日付を格納
+var currentMonth = new Date().getMonth();  // 現在の月を取得
+var currentYear = new Date().getFullYear(); // 現在の年を取得
+var currentDay = new Date().getDate();
+const shifts = <%= raw @shifts.to_json %>;
+
+// 月と年を表示する関数
+function updateMonthYear() {
+  const monthNames = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
+  document.getElementById("month-year").innerText = `${monthNames[currentMonth]} ${currentYear}`;
+}
+
+// カレンダーを生成する関数
+function generateCalendar() {
+  const calendarEl = document.getElementById('calendar');
+  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+  const lastDateOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+  
+  let calendarHTML = weekdays.map(weekday => `<div class="calendar-header">${weekday}</div>`).join('');
+  
+  for (let i = 0; i < firstDayOfMonth; i++) {
+    calendarHTML += '<div class="calendar-day empty"></div>';
+  }
+
+  for (let day = 1; day <= lastDateOfMonth; day++) {
+    const isToday = (day === currentDay && currentMonth === new Date().getMonth() && currentYear === new Date().getFullYear());
+    const todayClass = isToday ? 'today' : '';
+    
+    const shiftForDay = shifts.find(shift => {
+      const shiftDate = new Date(shift.shift_start_time);
+      return shiftDate.getFullYear() === currentYear &&
+             shiftDate.getMonth() === currentMonth &&
+             shiftDate.getDate() === day;
+    });
+    
+    // ステータスに応じてクラスを設定
+    let shiftClass = '';
+    if (shiftForDay) {
+      if (shiftForDay.status === 'unavailable') {
+        shiftClass = 'unavailable';
+      } else if (shiftForDay.status === 'available') {
+        shiftClass = 'available';
+      } else if (shiftForDay.status === 'desired') {
+        shiftClass = 'desired';
+      }
+    }
+    
+    const shiftStatus = shiftForDay ? `（${shiftForDay.status_name}）` : '';  // シフトステータスの表示
+    
+    calendarHTML += `<div class="calendar-day ${todayClass} ${shiftClass}" onclick="openScheduleModal(${day})">${day}${shiftStatus}</div>`;
+  }
+
+  calendarEl.innerHTML = calendarHTML;
+}
+
+// 月を切り替える関数
+function changeMonth(direction) {
+  currentMonth = currentMonth + direction;
+
+  // 年をまたぐ処理
+  if (currentMonth < 0) {
+    currentMonth = 11; // 12月に戻る
+    currentYear--;     // 年を1減らす
+  } else if (currentMonth > 11) {
+    currentMonth = 0;  // 1月に戻る
+    currentYear++;     // 年を1増やす
+  }
+
+  generateCalendar();
+  updateMonthYear();
+}
+
+// カレンダーの日付をクリックした際にモーダルを表示する関数
+function openScheduleModal(day) {
+  // 選択された日付を作成
+  const selectedDate = new Date(currentYear, currentMonth, day);
+
+  // クリックした日付に対応するシフトを検索
+  const shiftForDay = shifts.find(shift => {
+    const shiftStartDate = new Date(shift.shift_start_time);
+    return shiftStartDate.getFullYear() === currentYear &&
+           shiftStartDate.getMonth() === currentMonth &&
+           shiftStartDate.getDate() === day;
+  });
+
+  // シフトが見つかった場合
+  if (shiftForDay) {
+    // シフトの開始時間、終了時間、コメントを表示
+    const shiftStartTime = new Date(shiftForDay.shift_start_time);
+    const shiftEndTime = new Date(shiftForDay.shift_end_time);
+    const shiftComment = shiftForDay.comment;
+
+    document.getElementById('scheduleForm').style.display = 'none';
+    document.getElementById('existingShift').style.display = 'block';
+
+    document.getElementById('shiftDetails').innerHTML = ` 
+      <strong>開始時間:</strong> ${shiftStartTime.toLocaleString()} <br>
+      <strong>終了時間:</strong> ${shiftEndTime.toLocaleString()} <br>
+      <strong>コメント:</strong> ${shiftComment}
+    `;
+
+    const modalFooter = document.querySelector('#existingShift .modal-footer');
+    modalFooter.innerHTML = `
+      <a href="/public/users/${shiftForDay.user_id}/shifts/${shiftForDay.id}" class="btn btn-secondary">詳細へ</a>
+      <a href="/public/users/${shiftForDay.user_id}/shifts/${shiftForDay.id}/edit" class="btn btn-warning">編集</a>
+    `;
+  } else {
+    document.getElementById('scheduleForm').style.display = 'block';
+    document.getElementById('existingShift').style.display = 'none';
+
+    const localStartDate = new Date(Date.UTC(currentYear, currentMonth, day, 8, 0, 0));
+    const localEndDate = new Date(Date.UTC(currentYear, currentMonth, day, 17, 0, 0));
+
+    const formatDateForInput = (date) => {
+      return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}T${String(date.getUTCHours()).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}`;
+    };
+
+    document.getElementById('shiftStartTime').value = formatDateForInput(localStartDate);
+    document.getElementById('shiftEndTime').value = formatDateForInput(localEndDate);
+  }
+
+  $('#scheduleModal').modal('show');
+}
+
+// ページが読み込まれた後にカレンダーを表示
+document.addEventListener("turbolinks:load", function() {
+  generateCalendar();
+  updateMonthYear();
+});
+
+function closeModal() {
+  $('#scheduleModal').modal('hide');
+}
+</script>
