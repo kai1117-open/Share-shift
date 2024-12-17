@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  shift_date: 1
+  shift_start_time: 2024-12-16 23:28:51
+  shift_end_time: 2024-12-16 23:28:51
+  status: 1
+
+two:
+  user: two
+  shift_date: 1
+  shift_start_time: 2024-12-16 23:28:51
+  shift_end_time: 2024-12-16 23:28:51
+  status: 1

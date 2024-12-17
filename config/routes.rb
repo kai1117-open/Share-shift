@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-
-
   namespace :public do
     get 'events/new'
     get 'events/create'
@@ -56,8 +54,15 @@ Rails.application.routes.draw do
 
   namespace :public do
     resources :group_tags, only: [:show]
+    
     resources :users, only: [:index, :show, :edit, :update] do
       post 'withdraw', on: :member
+      resources :shifts do
+        # カレンダーのシフトを取得するルート
+        collection do
+          get 'calendar_shifts'
+        end
+      end
     end
     
     resources :groups, only: [:index, :show] do
