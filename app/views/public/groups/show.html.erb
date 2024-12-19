@@ -74,6 +74,7 @@
       <% if @group.leader == current_user %>
         <%= link_to '新しいイベントを作成する', new_public_group_event_path(@group), class: 'btn btn-primary' %>
       <% end %> 
+      <%= link_to 'グループのシフトへ', public_group_group_shifts_path(@group), class: 'btn btn-secondary', data: { turbolinks: false } %> 
     </div>
     <%= link_to '戻る', public_groups_path, class: 'btn btn-secondary' %>  
   </div>

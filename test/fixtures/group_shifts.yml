@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  group: one
+  shift_start_time: 2024-12-18 22:57:58
+  shift_end_time: 2024-12-18 22:57:58
+  status: 1
+  comment: MyString
+
+two:
+  group: two
+  shift_start_time: 2024-12-18 22:57:58
+  shift_end_time: 2024-12-18 22:57:58
+  status: 1
+  comment: MyString

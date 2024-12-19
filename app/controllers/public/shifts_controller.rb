@@ -2,11 +2,14 @@ class Public::ShiftsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_user
   before_action :set_shift, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_user
+  before_action :authorize_user, except: [:index, :show]
 
   def index
-    @user = User.find(params[:user_id]) 
-    @shifts = Shift.where(user_id: current_user.id).map do |shift|
+    # params[:user_id] を使ってユーザーを取得
+    @user = User.find(params[:user_id])
+  
+    # @user に関連するシフトを取得
+    @shifts = @user.shifts.map do |shift|
       shift.attributes.merge(status_name: shift.status_name)  # status_nameを追加
     end
   end
@@ -18,6 +21,7 @@ class Public::ShiftsController < ApplicationController
   def edit
     @user = User.find(params[:user_id])  # ユーザーIDを取得
     @shift = @user.shifts.find(params[:id])  # 指定されたシフトIDを取得
+
   end
 
   def new
@@ -25,6 +29,12 @@ class Public::ShiftsController < ApplicationController
   end
 
   def create
+
+    if @user.id != current_user.id
+      redirect_to root_path, alert: '不正な操作です。'
+      return
+    end
+
     # 日時を適切に設定
     @shift = @user.shifts.build(shift_params)
 
@@ -40,7 +50,7 @@ class Public::ShiftsController < ApplicationController
     @shift = @user.shifts.find(params[:id])  # 指定されたシフトIDを取得
   
     if @shift.update(shift_params)
-      redirect_to public_user_shift_path(@user.id, @shift.id), notice: 'シフトが更新されました'
+      redirect_to public_user_shifts_path(@user), notice: 'シフトが更新されました'
     else
       render :edit
     end
@@ -60,22 +70,28 @@ class Public::ShiftsController < ApplicationController
   private
 
   def set_user
-    @user = User.find(params[:user_id])
+    @user = User.find_by(id: params[:user_id])
+  
+    unless @user
+      redirect_to public_user_path(current_user), alert: "エラーが発生しました"
+    end
   end
 
   def set_shift
-    @shift = @user.shifts.find(params[:id])
+    @shift = @user.shifts.find_by(id: params[:id])
+  
+    unless @shift
+      redirect_to public_user_path(current_user), alert: "シフトが見つかりませんでした。"
+    end
   end
 
   def shift_params
-    # :shift_dateを削除し、:shift_start_time, :shift_end_time, :status, :commentを許可
     params.require(:shift).permit(:shift_start_time, :shift_end_time, :status, :comment, :user_id)
   end
 
   def authorize_user
-    # @shift が nil でない場合にユーザーの確認を行う
     if @shift && @shift.user != current_user
-      redirect_to public_user_path(@user), alert: '権限がありません。'
+      redirect_to public_user_shifts_path(@user), alert: '権限がありません。'
     end
   end
 

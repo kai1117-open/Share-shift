@@ -72,6 +72,7 @@ Rails.application.routes.draw do
       post 'join', on: :member  # グループ参加用のルート
       delete 'leave', on: :member
       resources :events, only: [:new, :create, :show, :index]
+      resources :group_shifts
     end
 
     resources :posts do
