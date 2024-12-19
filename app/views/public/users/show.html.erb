@@ -3,7 +3,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: #ffb6c1; /* かわいいピンク色 */
+  background-color: #ffb6c1;
   color: #fff;
   font-weight: bold;
   border: none;
@@ -15,7 +15,7 @@
 }
 
 .chat-btn:hover {
-  background-color: #ff91a4; /* ホバー時の色 */
+  background-color: #ff91a4; 
   color: #fff;
   transform: translateY(-3px);
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
@@ -41,13 +41,13 @@
   <div class="d-flex justify-content-between">
     <% if current_user == @user %>
       <%= link_to '編集', edit_public_user_path(@user), class: 'btn btn-warning ' %>
-      <%= link_to 'マイシフトへ', public_user_shifts_path(@user), class: 'btn btn-info ', data: { turbolinks: false } %>
     <% end %>
       <% if current_user != @user %>
         <%= link_to public_chat_path(@user.id), class: "chat-btn" do %>
          <i class="fas fa-comment-dots"></i> chatを始める
         <% end %>
       <% end %>
+      <%= link_to 'マイシフトへ', public_user_shifts_path(@user), class: 'btn btn-info ', data: { turbolinks: false } %>
       <%= link_to '戻る', public_users_path, class: 'btn btn-secondary' %>
   </div>
 

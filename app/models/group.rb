@@ -5,6 +5,7 @@ class Group < ApplicationRecord
   has_many :users, through: :group_memberships, source: :user
   has_many :events, dependent: :destroy  # グループに関連するイベントを取得するための関連付け
   has_many :group_tags, dependent: :destroy
+  has_many :group_shifts, dependent: :destroy
   accepts_nested_attributes_for :group_tags, allow_destroy: true
   
   validates :name, presence: true
