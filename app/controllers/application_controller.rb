@@ -6,14 +6,10 @@ class ApplicationController < ActionController::Base
   before_action :check_user_status
 
   def after_sign_in_path_for(resource)
-    public_posts_path
-  end
-
-  def after_sign_in_path_for(resource)
     if resource.is_a?(Admin)
       admin_homes_path
     else
-      public_posts_path
+      public_homes_path
     end
   end
 

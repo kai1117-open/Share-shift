@@ -39,7 +39,7 @@
       <% if @group.users.any? %>
         <div class="d-flex justify-content-between">
           <button class="btn btn-info" id="toggle-participants-btn">参加者を表示</button>
-          <%= link_to 'シフト表記', admin_group_events_path(@group), class: 'btn btn-info' %>
+          <%= link_to 'イベント一覧', admin_group_events_path(@group), class: 'btn btn-info' %>
         </div>
         
         <div id="participants-list" style="display:none;">
@@ -72,7 +72,7 @@
     <!-- 編集・戻るボタン -->
     <div class="card-footer d-flex justify-content-between">
       <%= link_to '編集', edit_admin_group_path(@group), class: 'btn btn-warning btn-sm' %>
-      <%= link_to '戻る', admin_groups_path, class: 'btn btn-secondary btn-sm' %>
+      <%= link_to '一覧へ戻る', admin_groups_path, class: 'btn btn-secondary btn-sm' %>
     </div>
   </div>
 </div>

@@ -1,5 +1,6 @@
 class Public::GroupsController < ApplicationController
   before_action :authenticate_user!  # ユーザーがログインしているか確認
+  before_action :ensure_guest_user, except: [:show, :index]
 
   def index
     @groups = Group.all
@@ -28,6 +29,7 @@ class Public::GroupsController < ApplicationController
     current_user.group_memberships.find_by(group: @group).destroy
     redirect_to public_group_path(@group), notice: 'グループを退会しました。'
   end
+
   def search
     @groups = Group.all
     filter_groups_by_name
@@ -49,4 +51,9 @@ class Public::GroupsController < ApplicationController
     end
   end
 
+  def ensure_guest_user
+    if current_user.email == "guest@example.com"
+      redirect_to public_user_path(current_user), notice: "ゲストユーザーの権限では不可能です"
+    end
+  end
 end

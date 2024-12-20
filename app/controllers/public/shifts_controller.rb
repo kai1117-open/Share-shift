@@ -3,6 +3,7 @@ class Public::ShiftsController < ApplicationController
   before_action :set_user
   before_action :set_shift, only: [:show, :edit, :update, :destroy]
   before_action :authorize_user, except: [:index, :show]
+  before_action :ensure_guest_user, only: [:edit, :update, :show, :create, :destroy]
 
   def index
     # params[:user_id] を使ってユーザーを取得
@@ -21,7 +22,6 @@ class Public::ShiftsController < ApplicationController
   def edit
     @user = User.find(params[:user_id])  # ユーザーIDを取得
     @shift = @user.shifts.find(params[:id])  # 指定されたシフトIDを取得
-
   end
 
   def new
@@ -29,7 +29,6 @@ class Public::ShiftsController < ApplicationController
   end
 
   def create
-
     if @user.id != current_user.id
       redirect_to root_path, alert: '不正な操作です。'
       return
@@ -95,4 +94,9 @@ class Public::ShiftsController < ApplicationController
     end
   end
 
+  def ensure_guest_user
+    if current_user.email == "guest@example.com"
+      redirect_to public_user_path(current_user), notice: "ゲストユーザーの権限では不可能です"
+    end
+  end 
 end

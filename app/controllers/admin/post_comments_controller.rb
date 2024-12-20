@@ -14,10 +14,6 @@ class Admin::PostCommentsController < ApplicationController
     end
   end
 
-
-
-
-
   # コメント編集フォーム
   def edit
   end
