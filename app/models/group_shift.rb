@@ -4,16 +4,16 @@ class GroupShift < ApplicationRecord
   validates :shift_end_time, presence: true
   validates :status, presence: true
   
-  enum status: { unavailable: 0, available: 1, desired: 2 }
+  enum status: { unavailable: 0, desired: 1, overstaffed: 2 }
 
   def status_name
     case status
     when "unavailable"
-      "出勤不可"
-    when "available"
-      "出勤可能"
+      "営業不可"
     when "desired"
-      "出勤希望"
+      "応援希望"
+    when "overstaffed"
+      "人員過多"
     else
       "不明"
     end

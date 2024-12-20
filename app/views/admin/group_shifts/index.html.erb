@@ -1,0 +1,48 @@
+<h1>グループシフト一覧</h1>
+
+<!-- 検索フォーム -->
+<%= form_with url: admin_group_shifts_path, method: :get, local: true do %>
+  <div class="row mb-3">
+    <!-- グループ名検索 -->
+    <div class="col-md-4">
+      <%= label_tag :group_name, 'グループ名' %>
+      <%= text_field_tag :group_name, params[:group_name], class: 'form-control' %>
+    </div>
+
+    <!-- ステータス検索 -->
+    <div class="col-md-4">
+      <%= label_tag :status, 'ステータス' %>
+      <%= select_tag :status, options_for_select([['指定なし', ''], ['営業不可', 'unavailable'], ['応援希望', 'desired'], ['人員過多', 'overstaffed']], params[:status]), class: 'form-select' %>
+    </div>
+
+    <!-- 検索ボタン -->
+    <div class="col-md-4 mt-4">
+      <%= submit_tag '検索', class: 'btn btn-primary' %>
+      <%= link_to 'リセット', admin_group_shifts_path, class: 'btn btn-secondary' %>
+    </div>
+  </div>
+<% end %>
+
+<!-- 一覧表示 -->
+<table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th>グループ名</th>
+      <th>シフト開始時間</th>
+      <th>シフト終了時間</th>
+      <th>ステータス</th>
+      <th>コメント</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @group_shifts.each do |shift| %>
+      <tr>
+        <td><%= shift.group.name %></td>
+        <td><%= shift.shift_start_time.strftime('%Y-%m-%d %H:%M') %></td>
+        <td><%= shift.shift_end_time.strftime('%Y-%m-%d %H:%M') %></td>
+        <td><%= shift.status_name %></td>
+        <td><%= shift.comment %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

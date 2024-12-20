@@ -31,7 +31,7 @@
               未登録 <!-- グループに所属していない場合 -->
             <% end %>
           </td>
-          <td><%= user.role %></td>
+          <td><%= user.role_name %></td>
           <td><%= link_to '詳細', public_user_path(user), class: 'btn btn-info btn-sm' %></td>
         </tr>
       <% end %>

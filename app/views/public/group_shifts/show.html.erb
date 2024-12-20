@@ -10,12 +10,14 @@
   <!-- ボタンエリア -->
   <div class="d-flex justify-content-between mt-4">
     <!-- 編集ページへのリンク (左端) -->
+    <% if @group.leader == current_user %>
     <%= link_to '編集', edit_public_group_group_shift_path(@shift.group_id, @shift.id), class: 'btn btn-primary' %>
-    
+    <% end %> 
     <!-- インデックスページへ戻るリンク (右端) -->
     <%= link_to '戻る', public_group_group_shifts_path(@group), class: 'btn btn-secondary' %>
-
+    <% if @group.leader == current_user %>
     <!-- 削除ボタン (右端) -->
     <%= link_to '削除', public_group_group_shift_path(@shift.group_id, @shift.id), method: :delete, data: { confirm: '本当に削除してもよろしいですか？' }, class: 'btn btn-danger' %>
+    <% end %> 
   </div>
 </div>
