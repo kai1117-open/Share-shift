@@ -4,7 +4,7 @@ class Admin::ShiftsController < ApplicationController
     @shifts = Shift.includes(:user).order(shift_start_time: :asc)
 
     # グループ名で検索
-    if params[:group_name].present?
+    if params[:user_name].present?
       @shifts = @shifts.joins(:user).where('users.name LIKE ?', "%#{params[:user_name]}%")
     end
 
@@ -13,6 +13,9 @@ class Admin::ShiftsController < ApplicationController
       @shifts = @shifts.where(status: params[:status])
     end
 
+    # 都道府県で検索
+    if params[:prefecture_id].present?
+      @shifts = @shifts.joins(user: :prefecture).where(prefectures: { id: params[:prefecture_id] })
+    end
   end
-
 end

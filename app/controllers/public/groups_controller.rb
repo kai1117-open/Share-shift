@@ -3,6 +3,8 @@ class Public::GroupsController < ApplicationController
 
   def index
     @groups = Group.all
+    filter_groups_by_name
+    filter_groups_by_prefecture
   end
 
   def show
@@ -26,14 +28,25 @@ class Public::GroupsController < ApplicationController
     current_user.group_memberships.find_by(group: @group).destroy
     redirect_to public_group_path(@group), notice: 'グループを退会しました。'
   end
-
   def search
-    if params[:keyword].present?
-      @groups = Group.where('name LIKE ?', "%#{params[:keyword]}%")
-    else
-      @groups = Group.all
+    @groups = Group.all
+    filter_groups_by_name
+    filter_groups_by_prefecture
+    render :index  # indexビューを再利用
+  end
+
+  private
+
+  def filter_groups_by_name
+    if params[:name].present?
+      @groups = @groups.where('name LIKE ?', "%#{params[:name]}%")
     end
-    render :index
+  end
+
+  def filter_groups_by_prefecture
+    if params[:prefecture_id].present?
+      @groups = @groups.where(prefecture_id: params[:prefecture_id])
+    end
   end
 
 end

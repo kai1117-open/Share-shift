@@ -8,12 +8,14 @@ class Admin::GroupShiftsController < ApplicationController
       @group_shifts = @group_shifts.joins(:group).where('groups.name LIKE ?', "%#{params[:group_name]}%")
     end
 
+    # 都道府県で検索
+    if params[:prefecture_id].present?
+      @group_shifts = @group_shifts.joins(:group).where(groups: { prefecture_id: params[:prefecture_id] })
+    end
+
     # ステータスで検索
     if params[:status].present?
       @group_shifts = @group_shifts.where(status: params[:status])
     end
-
   end
-
-
 end

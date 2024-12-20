@@ -76,8 +76,13 @@ class Admin::UsersController < ApplicationController
 
     # 所属グループで検索
     if params[:group_name].present?
-      @users = @users.joins(:groups) # グループを結合
+      @users = @users.joins(:groups)  # グループを結合
                      .where("groups.name LIKE ?", "%#{params[:group_name]}%")
+    end
+
+    # 都道府県で検索
+    if params[:prefecture_id].present?
+      @users = @users.where(prefecture_id: params[:prefecture_id])  # 直接prefecture_idでフィルタリング
     end
 
     @users = @users.order(created_at: :desc)  # 作成日順に並べ替え（オプション）
