@@ -8,7 +8,5 @@ class CreateShifts < ActiveRecord::Migration[6.1]
       t.string :comment
       t.timestamps
     end
-
-    add_index :shifts, :shift_date
   end
 end
