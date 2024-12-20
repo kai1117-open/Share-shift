@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     resources :homes, only: [:index]  # 管理者用のホーム画面
     resources :events, only: [:index, :show]
     resources :group_tags
+    resources :group_shifts, only: [:index]
+    resources :shifts, only: [:index]
     resources :groups do
       collection do
         get 'search'  # 管理者用検索ルート

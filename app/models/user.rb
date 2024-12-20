@@ -44,6 +44,22 @@ class User < ApplicationRecord
   # 交通手段メニュー
   enum transportation: { walking: 0, bicycle: 1, car: 2, train: 3 }
 
+  def transportation_name
+    case transportation
+    when "walking"
+      "徒歩"
+    when "bicycle"
+      "自転車"
+    when "car"
+      "自家用車"
+    when "train"
+      "公共交通機関"  
+    else
+      "不明"
+    end
+  end
+
+
   # transportationの選択肢を返すメソッド
   def self.transportation_options
     transportations.keys.map { |key| [I18n.t("#{key}"), key] }
@@ -53,6 +69,20 @@ class User < ApplicationRecord
 
   # 役職メニュー
   enum role: { part_time: 0, part: 1, employee: 2 }
+
+def role_name
+  case role
+  when "part_time"
+    "アルバイト"
+  when "part"
+    "パート"
+  when "employee"
+    "社員"
+  else
+    "不明"
+  end
+end
+
 
 
   def self.human_enum_name(attribute, value)

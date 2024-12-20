@@ -32,7 +32,7 @@
 
       <div class="mb-3">
         <%= form.label :transportation, class: 'form-label' %>
-        <%= form.select :transportation, options_for_select(User.transportation_options, @user.transportation), { class: 'form-control' } %>
+        <%= form.select :transportation, options_for_select([['徒歩', 'walking'], ['自転車', 'bicycle'], ['自家用車', 'car'], ['公共交通機関', 'train']], params[:transportation]), { class: 'form-control' } %>
       </div>
 
       <div class="d-grid gap-2">

@@ -10,12 +10,12 @@
 
       <div class="col-md-3">
         <%= label_tag :role, '役職', class: 'form-label' %>
-        <%= select_tag :role, options_for_select(User.roles.keys.map { |role| [role.humanize, role] }, params[:role]), class: 'form-select' %>
+        <%= select_tag :role, options_for_select([['指定なし', ''], ['アルバイト', 'part_time'], ['パート', 'part'], ['社員', 'employee']], params[:role]), class: 'form-select' %>
       </div>
 
       <div class="col-md-3">
         <%= label_tag :leader, 'リーダー', class: 'form-label' %>
-        <%= select_tag :leader, options_for_select([['選択してください', ''], ['リーダー', true], ['一般ユーザー', false]], params[:leader]), class: 'form-select' %>
+        <%= select_tag :leader, options_for_select([['指定なし', ''], ['リーダー', true], ['一般ユーザー', false]], params[:leader]), class: 'form-select' %>
       </div>
 
       <div class="col-md-3">
@@ -24,7 +24,7 @@
       </div>
 
       <div class="col-md-3 d-flex align-items-end">
-        <%= submit_tag '検索', class: 'btn btn-primary w-100' %>
+        <%= submit_tag '検索', class: 'btn btn-primary w-100 mt-3' %>
       </div>
     </div>
   <% end %>
@@ -48,7 +48,7 @@
           <tr>
             <td><%= user.name %></td>
             <td><%= user.email %></td>
-            <td><%= user.role.humanize %></td>
+            <td><%= user.role_name %></td>
             <td><%= user.leader ? 'リーダー' : '一般ユーザー' %></td>
             <td>
             <% if user.groups.any? %>

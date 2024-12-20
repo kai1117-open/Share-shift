@@ -33,8 +33,8 @@
     <p><strong>メール:</strong> <%= @user.email %></p>
     <p><strong>住所:</strong> <%= @user.address %></p>
   <% end %>
-    <p><strong>交通手段:</strong> <%= t("activerecord.attributes.user.transportation.#{@user.transportation}") %></p>
-    <p><strong>役職:</strong> <%= @user.role %></p>
+    <p><strong>交通手段:</strong> <%= @user.transportation_name %></p>
+    <p><strong>役職:</strong> <%= @user.role_name %></p>
     <p><strong>状態:</strong> <%= @user.status ? '有効' : '無効' %></p>
   </div>
 

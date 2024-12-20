@@ -19,7 +19,7 @@
     <!-- ステータスの入力 -->
     <div class="form-group mb-3">
       <%= form.label :status, 'ステータス:' %>
-      <%= form.select :status, [['出勤不可', 'unavailable'], ['出勤可能', 'available'], ['出勤希望', 'desired']], {}, { class: 'form-control', required: true } %>
+      <%= form.select :status, [['営業不可', 'unavailable'], ['応援希望', 'desired'], ['人員過多', 'overstaffed']], {}, { class: 'form-control', required: true } %>
     </div>
 
     <!-- コメントの入力 -->
