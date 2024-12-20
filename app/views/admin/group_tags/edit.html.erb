@@ -1,0 +1,36 @@
+<h1 class="my-4 text-center">タグを編集</h1>
+<div class="container">
+  <div class="card shadow-lg border-light mx-auto" style="max-width: 600px;">
+    <%= form_with model: @group_tag, url: admin_group_tag_path(@group_tag), method: :patch, local: true do |form| %>
+      
+      <% if @group_tag.errors.any? %>
+        <div class="alert alert-danger">
+          <h4 class="alert-heading">エラーがあります：</h4>
+          <ul>
+            <% @group_tag.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="card-body">
+        <div class="form-group">
+          <%= form.label :tag_name, "タグ名" %>
+          <%= form.text_field :tag_name, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :content, "タグ内容" %>
+          <%= form.text_field :content, class: "form-control" %>
+        </div>
+        
+        <div class="d-flex justify-content-between mt-4">
+          <%= form.submit "更新", class: "btn btn-primary" %>
+          <%= link_to '戻る', admin_group_tag_path(@group_tag), class: 'btn btn-secondary' %>
+        </div>
+      </div>
+      
+    <% end %>
+  </div>
+</div>

@@ -1,12 +1,10 @@
 class Admin::UsersController < ApplicationController
   before_action :authenticate_admin!  # 管理者がログインしているか確認
 
-
-
-
   # ユーザー一覧
   def index
     @users = User.all
+    @leader_groups = Group.joins(:leader).where(leader_id: User.where(leader: true).pluck(:id))
   end
 
   # ユーザー詳細
@@ -30,13 +28,13 @@ class Admin::UsersController < ApplicationController
     Group.exists?(leader_id: user.id)
   end
 
-
   # ユーザー情報更新
   def update
     @user = User.find(params[:id])
     if @user.update(user_params)
       redirect_to admin_user_path(@user), notice: 'ユーザー情報を更新しました。'
     else
+      flash.now[:alert] = '編集に失敗しました'
       render :edit
     end
   end
@@ -44,7 +42,7 @@ class Admin::UsersController < ApplicationController
   # ユーザー削除
   def destroy
     @user = User.find(params[:id])
-  
+
     # 対象者がグループリーダーだったら中止させる
     if @user.leader?
       redirect_to admin_users_path, alert: 'グループリーダーは削除できません。'
@@ -54,7 +52,7 @@ class Admin::UsersController < ApplicationController
     end
   end
 
-
+  # ユーザー検索
   def search
     @users = User.all
 
@@ -75,13 +73,17 @@ class Admin::UsersController < ApplicationController
 
     # 所属グループで検索
     if params[:group_name].present?
-      @users = @users.joins(:groups) # グループを結合
+      @users = @users.joins(:groups)  # グループを結合
                      .where("groups.name LIKE ?", "%#{params[:group_name]}%")
+    end
+
+    # 都道府県で検索
+    if params[:prefecture_id].present?
+      @users = @users.where(prefecture_id: params[:prefecture_id])  # 直接prefecture_idでフィルタリング
     end
 
     @users = @users.order(created_at: :desc)  # 作成日順に並べ替え（オプション）
   end
-
 
   private
 

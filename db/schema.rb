@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_12_14_002618) do
+ActiveRecord::Schema.define(version: 2024_12_20_012949) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -53,6 +53,27 @@ ActiveRecord::Schema.define(version: 2024_12_14_002618) do
     t.index ["user_id"], name: "index_group_memberships_on_user_id"
   end
 
+  create_table "group_shifts", force: :cascade do |t|
+    t.integer "group_id", null: false
+    t.datetime "shift_start_time", null: false
+    t.datetime "shift_end_time", null: false
+    t.integer "status"
+    t.string "comment"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["group_id"], name: "index_group_shifts_on_group_id"
+    t.index ["shift_start_time"], name: "index_group_shifts_on_shift_start_time"
+  end
+
+  create_table "group_tags", force: :cascade do |t|
+    t.string "tag_name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "content"
+    t.integer "group_id"
+    t.index ["group_id"], name: "index_group_tags_on_group_id"
+  end
+
   create_table "groups", force: :cascade do |t|
     t.integer "leader_id", null: false
     t.integer "tag_id"
@@ -60,6 +81,7 @@ ActiveRecord::Schema.define(version: 2024_12_14_002618) do
     t.string "address", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "prefecture_id", null: false
     t.index ["leader_id"], name: "index_groups_on_leader_id"
     t.index ["tag_id"], name: "index_groups_on_tag_id"
   end
@@ -83,9 +105,27 @@ ActiveRecord::Schema.define(version: 2024_12_14_002618) do
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
+  create_table "prefectures", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "rooms", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "shifts", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.datetime "shift_start_time", null: false
+    t.datetime "shift_end_time", null: false
+    t.integer "status"
+    t.string "comment"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index "\"shift_date\"", name: "index_shifts_on_shift_date"
+    t.index ["user_id"], name: "index_shifts_on_user_id"
   end
 
   create_table "user_rooms", force: :cascade do |t|
@@ -111,6 +151,7 @@ ActiveRecord::Schema.define(version: 2024_12_14_002618) do
     t.boolean "status", default: true, null: false
     t.integer "role", default: 0, null: false
     t.string "name", default: "", null: false
+    t.integer "prefecture_id", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -120,9 +161,13 @@ ActiveRecord::Schema.define(version: 2024_12_14_002618) do
   add_foreign_key "events", "groups"
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "users"
+  add_foreign_key "group_shifts", "groups"
+  add_foreign_key "groups", "prefectures"
   add_foreign_key "post_comments", "posts"
   add_foreign_key "post_comments", "users"
   add_foreign_key "posts", "users"
+  add_foreign_key "shifts", "users"
   add_foreign_key "user_rooms", "rooms"
   add_foreign_key "user_rooms", "users"
+  add_foreign_key "users", "prefectures"
 end

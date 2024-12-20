@@ -2,6 +2,7 @@ class Public::UsersController < ApplicationController
   before_action :authenticate_user!  # 非ログイン時のアクセスを防ぐ
   before_action :set_user, only: [:show, :edit, :update]
   before_action :authorize_user, only: [:edit, :update]
+  before_action :ensure_guest_user, only: [:edit, :update]
 
   # ユーザー一覧
   def index
@@ -10,8 +11,8 @@ class Public::UsersController < ApplicationController
     # 検索条件があればフィルタリング
     if params[:search].present?
       @users = @users.joins(:groups) # グループを結合
-                        .where('users.name LIKE ? OR groups.name LIKE ?', "%#{params[:search]}%", "%#{params[:search]}%")
-                        .distinct # 重複したユーザーを排除
+                      .where('users.name LIKE ? OR groups.name LIKE ?', "%#{params[:search]}%", "%#{params[:search]}%")
+                      .distinct # 重複したユーザーを排除
     end
   end
 
@@ -39,7 +40,6 @@ class Public::UsersController < ApplicationController
     end
   end
 
-
   def withdraw
     @user = current_user # 現在のログインユーザーを取得
 
@@ -57,8 +57,6 @@ class Public::UsersController < ApplicationController
     redirect_to root_path
   end
 
-
-
   private
 
   # ユーザーを設定するための共通メソッド
@@ -68,15 +66,21 @@ class Public::UsersController < ApplicationController
 
   # ユーザー情報の強いパラメーター
   def user_params
-    params.require(:user).permit(:name, :email, :address, :transportation, :role)
-  end   
+    params.require(:user).permit(:name, :email, :address, :transportation, :role, :prefecture_id)
+  end
 
-    # ログインユーザーが管理者または自分の情報のみ編集できるように制限
-    def authorize_user
-      # 現在のユーザーが編集対象のユーザーまたは管理者でない場合
-      if current_user != @user && current_user.role != 'admin'
-        redirect_to public_user_path(current_user), alert: '他のユーザーの情報は編集できません。'
-      end
+  # ログインユーザーが管理者または自分の情報のみ編集できるように制限
+  def authorize_user
+    # 現在のユーザーが編集対象のユーザーまたは管理者でない場合
+    if current_user != @user && current_user.role != 'admin'
+      redirect_to public_user_path(current_user), alert: '他のユーザーの情報は編集できません。'
     end
+  end
 
+  def ensure_guest_user
+    @user = User.find(params[:id])
+    if @user.email == "guest@example.com"
+      redirect_to public_user_path(current_user), notice: "ゲストユーザーは遷移できません。"
+    end
+  end
 end

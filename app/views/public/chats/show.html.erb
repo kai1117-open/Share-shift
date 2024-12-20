@@ -42,5 +42,10 @@
         <%= f.hidden_field :room_id, value: @room.id %>
       </div>
     <% end %>
+  <div class="text-end">
+    <%= link_to '戻る', public_user_path(@user), class: 'btn btn-secondary mt-3' %>
+  </div>
   </div>
 </div>
+
+

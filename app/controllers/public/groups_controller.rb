@@ -1,8 +1,11 @@
 class Public::GroupsController < ApplicationController
   before_action :authenticate_user!  # ユーザーがログインしているか確認
+  before_action :ensure_guest_user, except: [:show, :index]
 
   def index
     @groups = Group.all
+    filter_groups_by_name
+    filter_groups_by_prefecture
   end
 
   def show
@@ -28,12 +31,29 @@ class Public::GroupsController < ApplicationController
   end
 
   def search
-    if params[:keyword].present?
-      @groups = Group.where('name LIKE ?', "%#{params[:keyword]}%")
-    else
-      @groups = Group.all
-    end
-    render :index
+    @groups = Group.all
+    filter_groups_by_name
+    filter_groups_by_prefecture
+    render :index  # indexビューを再利用
   end
 
+  private
+
+  def filter_groups_by_name
+    if params[:name].present?
+      @groups = @groups.where('name LIKE ?', "%#{params[:name]}%")
+    end
+  end
+
+  def filter_groups_by_prefecture
+    if params[:prefecture_id].present?
+      @groups = @groups.where(prefecture_id: params[:prefecture_id])
+    end
+  end
+
+  def ensure_guest_user
+    if current_user.email == "guest@example.com"
+      redirect_to public_user_path(current_user), notice: "ゲストユーザーの権限では不可能です"
+    end
+  end
 end

@@ -15,21 +15,60 @@
         </div>
 
         <div class="field mb-3">
+          <%= f.label :prefecture_id, '都道府県' %>
+          <%= f.collection_select :prefecture_id, Prefecture.all, :id, :name, prompt: '都道府県を選択してください' %>
+        </div>
+
+        <div class="field mb-3">
           <%= f.label :leader_id, "リーダーを選択", class: 'form-label' %>
           <%= f.collection_select :leader_id, @users, :id, :name, prompt: "リーダーを選択", class: 'form-select' %>
         </div>
 
+
+        <h3>タグ入力</h3>
+        <div id="tags">
+        <%= f.fields_for :group_tags do |tag_form| %>
+          <div class="tag-fields">
+            <%= tag_form.label :tag_name, 'タグ名' %>
+            <%= tag_form.text_field :tag_name, class: 'form-control' %>
+            <%= tag_form.hidden_field :group_id, value: @group.id %>  <!-- ここでグループIDを隠しフィールドとして追加 -->
+            <%= tag_form.check_box :_destroy %>
+            <%= tag_form.label :_destroy, '削除' %>
+          </div>
+        <% end %>
+        </div>
+
+        <%= link_to 'タグを追加', '#', id: 'add_tag', class: 'btn btn-secondary' %>
 
       </div>
     </div>
 
   <div class="d-flex justify-content-between">
     <div class="actions">
-      <%= f.submit "作成", class: 'btn btn-success mt-3' %>
+      <%= f.submit "作成", class: 'btn btn-primary mt-3' %>
     </div>
   <% end %>
     <div>
-      <%= link_to '戻る',  request.referer || admin_homes_path, class: 'btn btn-secondary mt-3' %>
+      <%= link_to 'ダッシュボードへ戻る', admin_homes_path, class: 'btn btn-secondary mt-3' %> 
     </div>
   </div>
 </div>
+
+
+<script>
+  document.getElementById('add_tag').addEventListener('click', function(event) {
+    event.preventDefault();
+    const tagsDiv = document.getElementById('tags');
+    const newTagIndex = tagsDiv.querySelectorAll('.tag-fields').length;
+    
+    const newTagFields = `
+      <div class="tag-fields">
+        <label for="group_group_tags_attributes_${newTagIndex}_tag_name">タグ名</label>
+        <input type="text" name="group[group_tags_attributes][${newTagIndex}][tag_name]" id="group_group_tags_attributes_${newTagIndex}_tag_name" class="form-control">
+        <input type="hidden" name="group[group_tags_attributes][${newTagIndex}][_destroy]" id="group_group_tags_attributes_${newTagIndex}__destroy" value="false">
+      </div>
+    `;
+    
+    tagsDiv.insertAdjacentHTML('beforeend', newTagFields);
+  });
+</script>

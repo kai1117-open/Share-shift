@@ -1,0 +1,50 @@
+<h1 class="my-4 text-center">タグ一覧</h1>
+<div class="container">
+  <!-- 検索フォームの追加 -->
+  <%= form_with(url: admin_group_tags_path, method: :get, local: true) do |form| %>
+    <div class="input-group mb-3">
+      <%= form.text_field :q, placeholder: "タグ名で検索", class: "form-control" %>
+      <div class="input-group-append">
+        <%= form.submit "検索", class: "btn btn-outline-secondary" %>
+      </div>
+    </div>
+  <% end %>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>タグ名</th>
+        <th>タグ内容</th>
+        <th>グループ名</th>
+        <th class="text-center">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @group_tags.each do |tag| %>
+        <tr>
+          <td><%= tag.id %></td>
+          <td><%= tag.tag_name %></td>
+          <td><%= tag.content %></td>
+          <td>
+            <%= link_to tag.group.name, admin_group_path(tag.group), class: "btn btn-outline-primary" %>  <!-- グループ名のリンク -->
+          </td>
+          <td class="text-center">
+            <%= link_to '詳細', admin_group_tag_path(tag), class: "btn btn-info btn-sm" %>
+            <%= link_to '編集', edit_admin_group_tag_path(tag), class: "btn btn-warning btn-sm" %>
+            <%= link_to '削除', admin_group_tag_path(tag), method: :delete, data: { confirm: '本当に削除しますか？' }, class: "btn btn-danger btn-sm" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-between">
+    <div>
+    <%= link_to '新しいタグを作成', new_admin_group_tag_path, class: "btn btn-primary mt-3" %>
+    </div>
+
+    <div>
+      <%= link_to 'ダッシュボードへ戻る', admin_homes_path, class: 'btn btn-secondary mt-3' %>
+    </div>
+  </div>
+  </div>

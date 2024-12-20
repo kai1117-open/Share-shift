@@ -3,7 +3,12 @@ ja:
     attributes:
       user:
         transportation:
-          car: "車"
-          bus: "バス"
-          bicycle: "自転車"
           walking: "徒歩"
+          bicycle: "自転車"
+          car: "自動車"
+          train: "電車"
+  shift:
+    statuses:
+      unavailable: "出勤不可"
+      available: "出勤可能"
+      desired: "出勤希望"

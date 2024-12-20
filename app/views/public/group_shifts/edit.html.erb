@@ -1,0 +1,37 @@
+<div class="container mt-5">
+  <h1>グループシフト編集</h1>
+
+  <!-- フォーム開始 -->
+  <%= form_with model: @shift, url: public_group_group_shift_path(@shift.group_id, @shift.id), method: :patch, local: true do |form| %>
+
+    <!-- 開始時間の入力 -->
+    <div class="form-group mb-3">
+      <%= form.label :shift_start_time, '開始時間' %>
+      <%= form.datetime_local_field :shift_start_time, class: 'form-control', required: true %>
+    </div>
+
+    <!-- 終了時間の入力 -->
+    <div class="form-group mb-3">
+      <%= form.label :shift_end_time, '終了時間' %>
+      <%= form.datetime_local_field :shift_end_time, class: 'form-control', required: true %>
+    </div>
+
+    <!-- ステータスの入力 -->
+    <div class="form-group mb-3">
+      <%= form.label :status, 'ステータス:' %>
+      <%= form.select :status, [['営業不可', 'unavailable'], ['応援希望', 'desired'], ['人員過多', 'overstaffed']], {}, { class: 'form-control', required: true } %>
+    </div>
+
+    <!-- コメントの入力 -->
+    <div class="form-group mb-3">
+      <%= form.label :comment, 'コメント' %>
+      <%= form.text_area :comment, class: 'form-control' %>
+    </div>
+
+    <!-- ボタンエリア -->
+    <div class="d-flex justify-content-between mt-4">
+      <%= form.submit '保存', class: 'btn btn-primary' %>
+      <%= link_to '戻る', public_group_group_shifts_path(@group), class: 'btn btn-secondary' %>
+    </div>
+  <% end %>
+</div>

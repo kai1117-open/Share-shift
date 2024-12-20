@@ -14,7 +14,7 @@
           </div>
         <div class="card-footer d-flex justify-content-between">
         <%= link_to '編集', edit_admin_post_path(@post), class: 'btn btn-warning btn-sm' %>
-        <%= link_to '戻る',  request.referer || admin_posts_path, class: 'btn btn-secondary btn-sm' %>
+        <%= link_to '一覧へ戻る',  admin_posts_path, class: 'btn btn-secondary btn-sm' %>
       </div>
     </div>
   </div>

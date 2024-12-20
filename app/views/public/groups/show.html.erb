@@ -6,6 +6,10 @@
 
     <div class="card-body">
       <table class="table table-bordered">
+       <tr>
+          <th>都道府県</th>
+          <td><%= @group.prefecture.name %></td>
+        </tr>
         <tr>
           <th>住所</th>
           <td><%= @group.address %></td>
@@ -14,6 +18,19 @@
           <th>リーダー</th>
           <td><%= @group.leader.name %></td>
         </tr>
+        <tr>
+        <th>タグ</th>
+        <td>
+          <% if @group.group_tags.any? %>
+            <% @group.group_tags.each do |tag| %>
+              <%= link_to tag.tag_name, public_group_tag_path(tag), class: 'btn btn-outline-primary btn-sm' %>
+              <% if !@group.group_tags.last.eql?(tag) %> <% end %>
+            <% end %>
+          <% else %>
+            <p>タグはまだありません。</p>
+          <% end %>
+        </td>
+      </tr>
         <tr>
           <th>参加状態</th>
           <td>
@@ -44,7 +61,7 @@
             <tbody>
               <% @group.users.each do |user| %>
                 <tr>
-                  <td><%= user.name %></td>
+                  <td><%= link_to user.name, public_user_path(user), class: 'btn btn-outline-primary' %></td>
                 </tr>
               <% end %>
             </tbody>
@@ -61,8 +78,9 @@
       <% if @group.leader == current_user %>
         <%= link_to '新しいイベントを作成する', new_public_group_event_path(@group), class: 'btn btn-primary' %>
       <% end %> 
+      <%= link_to 'グループのシフトへ', public_group_group_shifts_path(@group), class: 'btn btn-secondary', data: { turbolinks: false } %> 
     </div>
-    <%= link_to '戻る', public_groups_path, class: 'btn btn-secondary' %>  
+    <%= link_to '一覧へ戻る', public_groups_path, class: 'btn btn-secondary' %>  
   </div>
 </div>
 

@@ -1,0 +1,34 @@
+<h1 class="my-4 text-center text-primary">タグ詳細</h1>
+
+<div class="container">
+  <div class="card shadow-lg border-light mx-auto" style="max-width: 600px;">
+    <div class="card-header bg-primary text-white">
+      <h4 class="card-title text-center mb-0"><strong>タグ名:</strong> <%= @group_tag.tag_name %></h4>
+    </div>
+    <div class="card-body">
+      <p><strong>タグID:</strong> <%= @group_tag.id %></p>
+      
+      <p>
+        <strong>グループ名:</strong> 
+        <% if @group_tag.group.present? %>
+          <%= link_to @group_tag.group.name, admin_group_path(@group_tag.group), class: "btn btn-outline-primary btn-sm" %>
+        <% else %>
+          <span class="text-muted">関連するグループはありません</span>
+        <% end %>
+      </p>
+
+      <!-- タグ内容の強調部分 -->
+      <p class="bg-light p-3 border rounded">
+        <strong>タグ内容:</strong> 
+        <span class="font-weight-bold " style="font-size: 1.1rem;"><%= @group_tag.content %></span>
+      </p>
+
+    </div>
+
+    <div class="d-flex justify-content-between card-footer">
+      <%= link_to '編集', edit_admin_group_tag_path(@group_tag), class: "btn btn-warning btn-sm" %>
+      <%= link_to 'タグ一覧に戻る', admin_group_tags_path, class: "btn btn-secondary btn-sm" %>
+    </div>
+
+  </div>
+</div>

@@ -1,27 +1,57 @@
+<style>
+.chat-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffb6c1;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.chat-btn:hover {
+  background-color: #ff91a4; 
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.chat-btn i {
+  margin-right: 8px;
+}
+
+</style>
 <div class="container mt-5">
   <h1 class="text-center mb-4"><%= @user.name %> の詳細</h1>
-
   <div class="card shadow-sm p-4 mb-4 bg-light rounded">
   <% if current_user == @user %>
     <p><strong>メール:</strong> <%= @user.email %></p>
+  <% end %>
+    <p><strong>都道府県:</strong> <%= @user.prefecture.name %></p> 
+  <% if current_user == @user %>
     <p><strong>住所:</strong> <%= @user.address %></p>
   <% end %>
-    <p><strong>交通手段:</strong> <%= @user.transportation %></p>
-    <p><strong>役職:</strong> <%= @user.role %></p>
+    <p><strong>交通手段:</strong> <%= @user.transportation_name %></p>
+    <p><strong>役職:</strong> <%= @user.role_name %></p>
     <p><strong>状態:</strong> <%= @user.status ? '有効' : '無効' %></p>
   </div>
 
   <div class="d-flex justify-content-between">
     <% if current_user == @user %>
-      <%= link_to '編集', edit_public_user_path(@user), class: 'btn btn-warning btn-sm' %>
+      <%= link_to '編集', edit_public_user_path(@user), class: 'btn btn-warning ' %>
     <% end %>
-      <%= link_to '戻る', public_users_path, class: 'btn btn-secondary btn-sm' %>
+      <% if current_user != @user %>
+        <%= link_to public_chat_path(@user.id), class: "chat-btn" do %>
+         <i class="fas fa-comment-dots"></i> chatを始める
+        <% end %>
+      <% end %>
+      <%= link_to 'マイシフトへ', public_user_shifts_path(@user), class: 'btn btn-info ', data: { turbolinks: false } %>
+      <%= link_to 'ホームへ戻る', public_homes_path, class: 'btn btn-secondary' %>
   </div>
 
-  <div class="mt-3">
-    <p><strong>マイシフトへのリンク</strong></p>
-  <% if current_user != @user %>
-    <%= link_to 'chatを始める', public_chat_path(@user.id), class: "ml-3" %>
-  <% end %>
-  </div>
 </div>

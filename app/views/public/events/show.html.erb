@@ -7,7 +7,9 @@
     <div class="card-body">
       <p><strong>内容:</strong> <%= @event.content %></p>
       <p><strong>作成日時:</strong> <%= @event.created_at.strftime("%Y-%m-%d %H:%M") %></p>
-      <%= link_to 'イベント一覧に戻る', public_group_events_path(@group), class: 'btn btn-secondary' %>
+    <div class="text-end mt-3">
+      <%= link_to 'イベント一覧へ', public_group_events_path(@group), class: 'btn btn-secondary' %>
+    </div>
     </div>
   </div>
 </div>

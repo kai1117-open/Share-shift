@@ -1,0 +1,24 @@
+<div class="container mt-5">
+  <h1><%= @user.name %>：シフト詳細</h1>
+
+  <!-- シフト情報 -->
+  <p><strong>開始時間:</strong> <%= @shift.shift_start_time %></p>
+  <p><strong>終了時間:</strong> <%= @shift.shift_end_time %></p>
+  <p><strong>ステータス:</strong> <%= @shift.status_name %></p>
+  <p><strong>コメント:</strong> <%= @shift.comment %></p>
+  
+  <!-- ボタンエリア -->
+  <div class="d-flex justify-content-between mt-4">
+    <!-- 編集ページへのリンク (左端) -->
+    <% if current_user.id == @user.id %>
+    <%= link_to '編集', edit_public_user_shift_path(@shift.user_id, @shift.id), class: 'btn btn-warning' %>
+    
+    <!-- インデックスページへ戻るリンク (右端) -->
+    
+
+    <!-- 削除ボタン (右端) -->
+    <%= link_to '削除', public_user_shift_path(@shift.user_id, @shift.id), method: :delete, data: { confirm: '本当に削除してもよろしいですか？' }, class: 'btn btn-danger' %>
+    <% end %>
+    <%= link_to '戻る', public_user_shifts_path(@shift.user_id), class: 'btn btn-secondary' %>
+  </div>
+</div>

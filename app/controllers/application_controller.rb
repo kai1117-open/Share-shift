@@ -6,14 +6,10 @@ class ApplicationController < ActionController::Base
   before_action :check_user_status
 
   def after_sign_in_path_for(resource)
-    public_posts_path
-  end
-
-  def after_sign_in_path_for(resource)
     if resource.is_a?(Admin)
       admin_homes_path
     else
-      public_posts_path
+      public_homes_path
     end
   end
 
@@ -41,7 +37,7 @@ class ApplicationController < ActionController::Base
 
   def configure_permitted_parameters
     # sign_upとaccount_updateで許可するパラメーター
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:address, :transportation, :role, :name])
-    devise_parameter_sanitizer.permit(:account_update, keys: [:address, :transportation, :role, :name])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:address, :transportation, :role, :name, :prefecture_id])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:address, :transportation, :role, :name, :prefecture_id])
   end
 end
