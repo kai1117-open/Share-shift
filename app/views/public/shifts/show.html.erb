@@ -11,7 +11,7 @@
   <div class="d-flex justify-content-between mt-4">
     <!-- 編集ページへのリンク (左端) -->
     <% if current_user.id == @user.id %>
-    <%= link_to '編集', edit_public_user_shift_path(@shift.user_id, @shift.id), class: 'btn btn-primary' %>
+    <%= link_to '編集', edit_public_user_shift_path(@shift.user_id, @shift.id), class: 'btn btn-warning' %>
     
     <!-- インデックスページへ戻るリンク (右端) -->
     

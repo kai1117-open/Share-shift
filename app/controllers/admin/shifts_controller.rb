@@ -1,7 +1,9 @@
 class Admin::ShiftsController < ApplicationController
+  before_action :authenticate_admin!
+
   def index
     # 基本のクエリ
-    @shifts = Shift.includes(:user).order(shift_start_time: :asc)
+    @shifts = Shift.includes(:user).order(shift_start_time: :desc)
 
     # グループ名で検索
     if params[:user_name].present?

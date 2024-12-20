@@ -71,7 +71,7 @@
   <button onclick="changeMonth(1)" class="btn btn-secondary">次月</button>
   <div class="calendar mt-4" id="calendar"></div>
   <div class="text-end">
-    <%= link_to 'グループページへ', public_group_path(@group.id), class: 'btn btn-secondary' %>
+    <%= link_to 'グループ詳細へ', public_group_path(@group.id), class: 'btn btn-secondary' %>
   </div>
 </div>
 <% if @group.leader == current_user %>

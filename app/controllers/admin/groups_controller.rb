@@ -47,8 +47,6 @@ class Admin::GroupsController < ApplicationController
     end
   end
 
-
-
   def destroy
     @group.destroy
     redirect_to admin_groups_path, notice: 'グループが削除されました。'
@@ -66,7 +64,7 @@ class Admin::GroupsController < ApplicationController
   def leave
     @group = Group.find(params[:id])
     @user = User.find(params[:user_id])
-    
+
     if @group.users.delete(@user)
       redirect_to admin_group_path(@group), notice: "#{@user.name} さんは退会しました。"
     else
@@ -78,7 +76,7 @@ class Admin::GroupsController < ApplicationController
 
   # ストロングパラメータ
   def group_params
-    params.require(:group).permit(:name, :address, :leader_id, :prefecture_id, group_tags_attributes: [:id, :tag_name, :_destroy, :group_id, ])
+    params.require(:group).permit(:name, :address, :leader_id, :prefecture_id, group_tags_attributes: [:id, :tag_name, :_destroy, :group_id])
   end
 
   # グループを設定
@@ -97,5 +95,4 @@ class Admin::GroupsController < ApplicationController
       @groups = @groups.where(prefecture_id: params[:prefecture_id])
     end
   end
-
 end

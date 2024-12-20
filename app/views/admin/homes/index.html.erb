@@ -1,68 +1,119 @@
-
 <div class="container mt-4">
   <h2 class="text-center futuristic-title">管理者ダッシュボード</h2>
 
-  <div class="row futuristic-container ">
-
-    <div class="col-md-4 futuristic-box">
-      <h4><i class="fas fa-users"></i> ユーザー数: <%= @users.count %></h4>
-      <h5><i class="fas fa-user-check"></i> アクティブユーザー: <%= @active_users.count %></h5>
-
-    </div>
-
-    <div class="col-md-4 futuristic-box">
-      <h4><i class="fas fa-file-alt"></i> 投稿数: <%= @posts.count %></h4>
-      <h5><i class="fas fa-user-times"></i> 非アクティブユーザー: <%= @inactive_users.count %></h5>
-    </div>
-
+  <div class="d-flex flex-wrap justify-content-center mb-4">
+  <%= link_to admin_shifts_path, class: 'btn btn-outline-primary btn-lg mx-2 mb-2' do %>
+    <i class="fas fa-calendar-check"></i> ユーザーシフト一覧
+  <% end %>
+  <%= link_to admin_group_shifts_path, class: 'btn btn-outline-primary btn-lg mx-2 mb-2' do %>
+    <i class="fas fa-calendar-alt"></i> グループシフト一覧
+  <% end %>
+  <%= link_to search_admin_users_path, class: 'btn btn-outline-primary btn-lg mx-2 mb-2' do %>
+    <i class="fas fa-search"></i> ユーザー検索
+  <% end %>
+  <%= link_to new_admin_group_path, class: 'btn btn-outline-primary btn-lg mx-2 mb-2' do %>
+    <i class="fa-solid fa-users-between-lines"></i></i> グループ作成
+  <% end %>
+  <%= link_to admin_group_tags_path, class: 'btn btn-outline-primary btn-lg mx-2 mb-2' do %>
+    <i class="fas fa-tags"></i> ジョブタグ一覧
+  <% end %>
+  <%= link_to admin_events_path, class: 'btn btn-outline-primary btn-lg mx-2 mb-2' do %>
+    <i class="fas fa-envelope-open-text"></i> 送信済みメール
+  <% end %>
   </div>
 
-<h4><%= link_to 'ユーザー検索へ', search_admin_users_path, class: 'nav-link' %></h4>
-<h4><%= link_to 'グループ作成へのリンク', new_admin_group_path, class: 'nav-link' %></h4>
-<h4><%= link_to 'ジョブタグの一覧へのリンク', admin_group_tags_path, class: 'nav-link' %></h4>
-<h4><%= link_to 'すべての送信済みメール一覧', admin_events_path, class: 'nav-link' %></h4>
-<h4><%= link_to 'すべてのコメント一覧', admin_post_comments_path, class: 'nav-link' %></h4>
-<h4><%= link_to 'すべてのユーザーシフト一覧', admin_shifts_path, class: 'nav-link' %></h4>
-<h4><%= link_to 'すべてのグループシフト一覧', admin_group_shifts_path, class: 'nav-link' %></h4>
 
-  
-
+  <!-- ユーザー一覧リンク -->
   <h3 class="mt-5"><%= link_to 'ユーザー一覧へ', admin_users_path, class: 'nav-link' %></h3>
   <table class="table table-bordered">
     <thead>
       <tr>
         <th>名前</th>
-        <th>メール</th>
-        <th>役職</th>
-        <th>ステータス</th>
+        <th>メールアドレス</th>
+        <th>リーダー</th>
+        <th>所属グループ</th>
+        <th>リーダー状態のグループ</th>
         <th class="text-center">操作</th>
       </tr>
     </thead>
     <tbody>
-      <% @users.each do |user| %>
+      <% if @users.present? %>
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= user.name %></td>
+            <td><%= user.email %></td>
+            <td><%= user.leader ? 'リーダー' : '一般ユーザー' %></td>
+            <td>
+              <% if user.groups.any? %>
+                <%= user.groups.map(&:name).join('<br>').html_safe %> <!-- 複数のグループ名を改行して表示 -->
+              <% else %>
+                未登録
+              <% end %>
+            </td>
+            <td>
+              <% leader_groups = Group.where(leader_id: user.id) %>
+              <% if leader_groups.any? %>
+                <%= leader_groups.map(&:name).join('<br>').html_safe %> <!-- リーダーになっているグループ名を改行して表示 -->
+              <% else %>
+                なし
+              <% end %>
+            </td>
+            <td class="text-center">
+              <%= link_to '詳細', admin_user_path(user), class: 'btn btn-info btn-sm' %>
+              <%= link_to '編集', edit_admin_user_path(user), class: 'btn btn-warning btn-sm' %>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
         <tr>
-          <td><%= user.name %></td>
-          <td><%= user.email %></td>
-          <td><%= user.role %></td>
-          <td><%= user.status ? '入会中' : '退会済み' %></td>
-          <td class="text-center">
-            <%= link_to '詳細', admin_user_path(user), class: 'btn btn-info btn-sm' %>
-            <%= link_to '編集', edit_admin_user_path(user), class: 'btn btn-warning btn-sm' %>
-            <%= link_to '削除', admin_user_path(user), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger btn-sm' %>
-          </td>
+          <td colspan="6" class="text-center">ユーザーが登録されていません。</td>
         </tr>
       <% end %>
     </tbody>
   </table>
 
-  <h3 class="mt-5"><%= link_to '投稿一覧へ', admin_posts_path, class: 'nav-link' %></h3>
+  <!-- グループ一覧リンク -->
+  <h3 class="mt-5"><%= link_to 'グループ一覧へ', admin_groups_path, class: 'nav-link' %></h3>
   <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>グループ名</th>
+        <th>住所</th>
+        <th>リーダー</th>
+        <th>作成日</th>
+        <th class="text-center">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @groups.present? %>
+        <% @groups.each do |group| %>
+          <tr>
+            <td><%= group.name %></td>
+            <td><%= group.address %></td>
+            <td><%= group.leader.name %></td>
+            <td><%= group.created_at.strftime('%Y-%m-%d') %></td>
+            <td class="text-center">
+              <%= link_to '詳細', admin_group_path(group), class: 'btn btn-info btn-sm' %>
+              <%= link_to '編集', edit_admin_group_path(group), class: 'btn btn-warning btn-sm' %>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <tr>
+          <td colspan="5" class="text-center">グループが登録されていません。</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+<h3 class="mt-5"><%= link_to '投稿一覧へ', admin_posts_path, class: 'nav-link' %></h3>
+<% if @posts.any? %>
+  <table class="table table-bordered mt-4">
     <thead>
       <tr>
         <th>タイトル</th>
         <th>内容</th>
         <th>投稿者</th>
-        <th>作成日</th>
         <th class="text-center">操作</th>
       </tr>
     </thead>
@@ -70,9 +121,8 @@
       <% @posts.each do |post| %>
         <tr>
           <td><%= post.title %></td>
-          <td><%= truncate(post.content, length: 50) %></td>
+          <td><%= truncate(post.content, length: 50) %></td> <!-- 内容が長い場合は50文字に制限 -->
           <td><%= post.user.name %></td>
-          <td><%= post.created_at.strftime('%Y-%m-%d') %></td>
           <td class="text-center">
             <%= link_to '詳細', admin_post_path(post), class: 'btn btn-info btn-sm' %>
             <%= link_to '編集', edit_admin_post_path(post), class: 'btn btn-warning btn-sm' %>
@@ -82,4 +132,24 @@
       <% end %>
     </tbody>
   </table>
+<% else %>
+    <div class="alert alert-info text-center" role="alert">
+      該当する対象は見つかりませんでした。
+    </div>
+<% end %>
+
+
+  <!-- 他のコンテンツ（ユーザー数、グループ数など）-->
+  <div class="row futuristic-container mt-5">
+    <div class="col-md-4">
+      <h4><i class="fas fa-users"></i> ユーザー数: <%= @users.present? ? @users.count : 0 %></h4>
+    </div>
+    <div class="col-md-4">
+      <h4><i class="fas fa-user-check"></i> アクティブユーザー: <%= @active_users.present? ? @active_users.count : 0 %></h4>
+    </div>
+    <div class="col-md-4">
+      <h4><i class="fas fa-users-cog"></i> グループ数: <%= @groups.present? ? @groups.count : 0 %></h4>
+    </div>
+  </div>
+
 </div>

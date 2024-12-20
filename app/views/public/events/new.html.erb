@@ -16,9 +16,13 @@
           <%= form.text_area :content, class: 'form-control' %>
         </div>
 
-        <%= form.submit '送信', class: 'btn btn-primary' %>
-      <% end %>
 
+        <div class="d-flex justify-content-between mt-3">
+          <%= form.submit '送信', class: 'btn btn-primary' %>
+          <%= link_to '戻る', public_group_path(@group), class: "btn btn-secondary" %>
+        </div>
+        
+      <% end %>
       <% if flash.now[:error] %>
         <div class="alert alert-danger mt-3">
           <%= flash.now[:error] %>

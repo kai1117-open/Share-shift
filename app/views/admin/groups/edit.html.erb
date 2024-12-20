@@ -44,7 +44,7 @@
         <%= link_to '削除', admin_group_path(@group), method: :delete, data: { confirm: '本当に削除しますか？' }, class: "btn btn-danger mt-3" %>
      </div>
       <div>
-        <%= link_to '戻る', admin_group_path(@group), class: 'btn btn-secondary mt-3' %>
+        <%= link_to '戻る', request.referer || admin_group_path(@group), class: 'btn btn-secondary mt-3' %>
       </div>
     </div>
 

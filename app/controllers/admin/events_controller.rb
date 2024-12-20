@@ -3,7 +3,7 @@ class Admin::EventsController < ApplicationController
 
   def index
     sort_order = params[:sort] || 'sent_at_asc'
-    
+
     # グループ名での検索と送信日時でのソート
     @events = Event.joins(:group)  # GroupテーブルとJOIN
                    .where('groups.name LIKE ?', "%#{params[:search]}%")  # グループ名でフィルタリング
@@ -12,10 +12,8 @@ class Admin::EventsController < ApplicationController
                    )
   end
 
-
   def show
     @group = Group.find(params[:group_id])
     @events = @group.events
   end
-
 end

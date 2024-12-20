@@ -1,7 +1,9 @@
 class Public::PostsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_post, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:show, :index] 
   before_action :authorize_user, only: [:edit, :update, :destroy]  # ここで認可処理を追加
+  before_action :ensure_guest_user, except: [:show, :index] 
 
   # 新規投稿入力フォーム
   def new
@@ -22,6 +24,7 @@ class Public::PostsController < ApplicationController
   # 投稿処理
   def create
     @post = current_user.posts.new(post_params)
+
     if @post.save
       redirect_to public_post_path(@post), notice: '投稿が作成されました。'
     else
@@ -76,4 +79,10 @@ class Public::PostsController < ApplicationController
       redirect_to public_posts_path, alert: 'この投稿を編集する権限がありません。'
     end
   end
+
+  def ensure_guest_user
+    if current_user.email == "guest@example.com"
+      redirect_to public_user_path(current_user), notice: "ゲストユーザーの権限では不可能です"
+    end
+  end 
 end

@@ -30,7 +30,7 @@
           <%= link_to '削除', public_post_path(@post), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger btn-lg me-2' %>
           <%= form.submit '更新する', class: "btn btn-primary" %>
         </div>
-        <%= link_to '戻る', public_posts_path, class: 'btn btn-outline-secondary btn-lg' %>
+        <%= link_to '戻る', request.referer || public_posts_path, class: 'btn btn-outline-secondary btn-lg' %>
         </div>
 
 

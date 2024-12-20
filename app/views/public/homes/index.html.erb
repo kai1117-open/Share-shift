@@ -1,0 +1,74 @@
+<div class="container mt-5">
+  <h1 class="text-center mb-4">ホーム</h1>
+
+  <%# ボタン群 %>
+  <div class="links text-center mt-4">
+    <a href="<%= public_users_path %>" class="btn btn-primary btn-lg mx-2 mb-3">
+      <i class="fas fa-users"></i> ユーザー一覧
+    </a>
+    <a href="<%= public_posts_path %>" class="btn btn-success btn-lg mx-2 mb-3">
+      <i class="fas fa-file-alt"></i> 投稿一覧
+    </a>
+    <a href="<%= public_groups_path %>" class="btn btn-info btn-lg mx-2 mb-3">
+      <i class="fas fa-users-cog"></i> グループ一覧
+    </a>
+  </div>
+  
+  <%# ユーザーが所属しているグループをすべて表示 %>
+  <% if @user_groups.present? && @user_groups.any? %>
+    <div class="user-group mb-5">
+      <h2 class="text-primary">あなたのグループ</h2>
+      <div class="row">
+        <% @user_groups.each do |group| %>
+          <div class="col-md-6 mb-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title text-center"><%= group.name %></h5>
+                <p class="card-text"><%= group.address %></p>
+                <p class="card-text text-muted"><%= group.prefecture.name %></p>
+                <p class="card-text"><strong>リーダー:</strong> <%= group.leader.name %></p>
+                <div class="d-flex justify-content-between">
+                  <a href="<%= public_group_path(group) %>" class="btn btn-outline-primary">詳細</a>
+                  <a href="<%= public_group_group_shifts_path(group) %>" class="btn btn-outline-secondary">シフト一覧</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="no-group text-center mb-5">
+      <h2 class="text-warning">あなたはグループに所属していません</h2>
+      <p>
+        <a href="<%= public_groups_path %>" class="btn btn-outline-info btn-lg">グループ一覧</a>
+      </p>
+    </div>
+  <% end %>
+
+  <%# 新着投稿の表示 %>
+  <div class="recent-posts mb-5">
+    <h2 class="text-primary">新着投稿</h2>
+    <% @recent_posts.each do |post| %>
+      <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title">
+            <%= link_to post.title, public_post_path(post), class: 'text-decoration-none text-dark' %>
+          </h2>
+          <p class="card-text"><%= post.content.truncate(100) %></p>
+          
+          <div>
+            <small class="text-muted">投稿者: <%= post.user.name %></small>
+          </div>
+          <div class="d-flex justify-content-between">
+            <% if current_user == post.user %>
+              <%= link_to '編集', edit_public_post_path(post), class: 'btn btn-warning btn-sm' %>
+              <%= link_to '削除', public_post_path(post), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger btn-sm' %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+</div>

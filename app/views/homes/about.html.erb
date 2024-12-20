@@ -1,19 +1,77 @@
 <div class="container mt-5">
-
-
-
   <div class="row justify-content-center">
     <div class="col-md-8">
-      <div class="card shadow">
-        <div class="card-header bg-primary text-white text-center">
-          <h1 class="mb-0">About</h1>
+      <div class="card shadow-lg border-0 rounded">
+        <!-- ヘッダー -->
+        <div class="card-header bg-primary text-white text-center py-4 rounded-top">
+          <h1 class="mb-0"><i class="fas fa-info-circle"></i> About</h1>
         </div>
+
+        <!-- ボディ -->
         <div class="card-body">
-          <p class="lead">このサイトは、各店舗のシフト調整を簡単に行うために作成されました。</p>
-          <p>出勤したい日を管理したり、他店舗の応援を簡単に依頼できます。</p>
+          <p class="lead text-center mb-4">
+            このサイトは、各店舗のシフト調整を簡単に行うために作成されました。
+          </p>
+          <p class="text-center">
+            出勤したい日を管理したり、他店舗の応援を簡単に確認できます。</br>
+            グループ（店舗）の参加で所属しているグループ（店舗）でのイベント通知のメールを受け取れます。</br>
+            働いて感じたことや共有したいことが投稿できたり</br>
+            それらにコメントすることができます。</br>
+            ユーザー同士で個別にチャットを送り合うことが可能です
+          </p>
+
+          <!-- ボタン -->
+          <div class="text-center my-4">
+            <%= link_to '新規会員登録', new_user_registration_path, class: 'btn btn-outline-primary btn-lg mx-2 shadow-sm' %>
+            <%= link_to "ログイン", new_user_session_path, class: 'btn btn-outline-primary btn-lg mx-2 shadow-sm', method: :post %>
+          </div>
+
+          <hr class="my-4">
+
+          <!-- サービス内容 -->
+          <h3 class="text-primary text-center mb-3"><i class="fa-solid fa-people-arrows"></i> リーダー機能について</h3>
+          <p class="text-center">
+            リーダー機能とは、管理者からシフトの管理を任されたユーザーです。</br>
+            基本的には社員の中から任命されます。グループ（店舗）のオーナーは、リーダー状態のユーザーから任命されます。</br>
+            グループ（店舗）のシフトは、その時に選ばれたリーダーのみ記入ができます。
+          </p>
+          <hr class="my-4">
+
+          <!-- サービス内容 -->
+          <h3 class="text-primary text-center mb-3"><i class="fas fa-cogs"></i> シフト機能について</h3>
+          <ul class="list-group list-group-flush mb-4">
+            <li class="list-group-item"><strong>ユーザーシフト：</strong> あなたのシフトの希望を三段階でカレンダーに記入できます</br></li>
+            <li class="list-group-item"><strong>グループシフト：</strong> 他店舗の人員の状況を三段階で表記されています</li>
+          </ul>
+
+
+          <hr class="my-4">
+
+          <!-- ゲストログイン -->
+          <h3 class="text-primary text-center mb-3"><i class="fas fa-user-secret"></i> ゲストログインについて</h3>
+          <p class="text-center">
+            ゲストログイン（閲覧用）では、以下のページをご覧いただけます：
+          </p>
+          <ul class="list-group list-group-flush mb-4">
+            <li class="list-group-item">ユーザー一覧</li>
+            <li class="list-group-item">投稿一覧</li>
+            <li class="list-group-item">グループ一覧</li>
+            <li class="list-group-item">それらの詳細ページ</li>
+            <li class="list-group-item">各ユーザーと各グループのシフト（カレンダー）</li>
+          </ul>
+          <p class="text-center mb-4">
+            なお、投稿作成やグループ参加は会員登録後にご利用いただけます。
+          </p>
+
+          <!-- ゲストログインボタン -->
+          <div class="text-center">
+            <%= link_to "ゲストログイン（閲覧用）", users_guest_sign_in_path, class: 'btn btn-outline-primary btn-lg shadow-sm', method: :post %>
+          </div>
         </div>
-        <div class="card-footer text-center text-muted">
-          <small>あなたのシフト管理をもっと簡単に。</small>
+
+        <!-- フッター -->
+        <div class="card-footer bg-light text-center rounded-bottom">
+          <small class="text-muted">あなたのシフト管理をもっと簡単に。</small>
         </div>
       </div>
     </div>

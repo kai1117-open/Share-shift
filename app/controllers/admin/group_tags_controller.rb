@@ -1,4 +1,5 @@
 class Admin::GroupTagsController < ApplicationController
+  before_action :authenticate_admin!
   before_action :set_group_tag, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -11,7 +12,6 @@ class Admin::GroupTagsController < ApplicationController
   end
 
   def show
-
   end
 
   def new
@@ -56,5 +56,4 @@ class Admin::GroupTagsController < ApplicationController
   def group_tag_params
     params.require(:group_tag).permit(:content, :tag_name, :group_id)
   end
-
 end

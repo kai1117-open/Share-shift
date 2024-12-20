@@ -1,12 +1,10 @@
 class Admin::UsersController < ApplicationController
   before_action :authenticate_admin!  # 管理者がログインしているか確認
 
-
-
-
   # ユーザー一覧
   def index
     @users = User.all
+    @leader_groups = Group.joins(:leader).where(leader_id: User.where(leader: true).pluck(:id))
   end
 
   # ユーザー詳細
@@ -30,7 +28,6 @@ class Admin::UsersController < ApplicationController
     Group.exists?(leader_id: user.id)
   end
 
-
   # ユーザー情報更新
   def update
     @user = User.find(params[:id])
@@ -45,7 +42,7 @@ class Admin::UsersController < ApplicationController
   # ユーザー削除
   def destroy
     @user = User.find(params[:id])
-  
+
     # 対象者がグループリーダーだったら中止させる
     if @user.leader?
       redirect_to admin_users_path, alert: 'グループリーダーは削除できません。'
@@ -55,7 +52,7 @@ class Admin::UsersController < ApplicationController
     end
   end
 
-
+  # ユーザー検索
   def search
     @users = User.all
 
@@ -87,7 +84,6 @@ class Admin::UsersController < ApplicationController
 
     @users = @users.order(created_at: :desc)  # 作成日順に並べ替え（オプション）
   end
-
 
   private
 

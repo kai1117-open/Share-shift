@@ -19,20 +19,20 @@
           <td><%= user.email %></td>
           <td><%= user.leader ? 'リーダー' : '一般ユーザー' %></td>
           <td>
-          <% if user.groups.any? %>
-            <%= user.groups.first.name %> <!-- 所属しているグループ名を表示 -->
-          <% else %>
-            未登録
-          <% end %>
+            <% if user.groups.any? %>
+              <%= user.groups.map(&:name).join('<br>').html_safe %> <!-- 複数のグループ名を改行して表示 -->
+            <% else %>
+              未登録
+            <% end %>
           </td>
           <td>
-          <% leader_groups = Group.where(leader_id: user.id) %>
-          <% if leader_groups.any? %>
-            <%= leader_groups.map(&:name).join(', ') %> <!-- リーダーになっているグループ名を表示 -->
-          <% else %>
-            なし
-          <% end %>
-        </td>
+            <% leader_groups = Group.where(leader_id: user.id) %>
+            <% if leader_groups.any? %>
+              <%= leader_groups.map(&:name).join('<br>').html_safe %> <!-- リーダーになっているグループ名を改行して表示 -->
+            <% else %>
+              なし
+            <% end %>
+          </td>
           <td class="text-center">
             <%= link_to '詳細', admin_user_path(user), class: 'btn btn-info btn-sm' %>
             <%= link_to '編集', edit_admin_user_path(user), class: 'btn btn-warning btn-sm' %>
@@ -42,7 +42,8 @@
       <% end %>
     </tbody>
   </table>
+  
   <div class="text-end">
-  <%= link_to '戻る', admin_homes_path, class: 'btn btn-secondary' %>
+    <%= link_to 'ダッシュボードへ戻る', admin_homes_path, class: 'btn btn-secondary' %> <!-- 管理者ダッシュボードに戻るリンク -->
   </div>
 </div>
