@@ -31,6 +31,9 @@
   <div class="card shadow-sm p-4 mb-4 bg-light rounded">
   <% if current_user == @user %>
     <p><strong>メール:</strong> <%= @user.email %></p>
+  <% end %>
+    <p><strong>都道府県:</strong> <%= @user.prefecture.name %></p> 
+  <% if current_user == @user %>
     <p><strong>住所:</strong> <%= @user.address %></p>
   <% end %>
     <p><strong>交通手段:</strong> <%= @user.transportation_name %></p>

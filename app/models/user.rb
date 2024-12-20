@@ -6,7 +6,7 @@ class User < ApplicationRecord
   validates :name, presence: true
 
 
-
+  belongs_to :prefecture
   has_many :led_groups, class_name: 'Group', foreign_key: :leader_id
   has_many :group_memberships, dependent: :destroy
   has_many :groups, through: :group_memberships

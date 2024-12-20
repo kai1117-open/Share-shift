@@ -5,6 +5,8 @@ class Admin::GroupsController < ApplicationController
   # グループ一覧
   def index
     @groups = Group.all
+    filter_groups_by_name
+    filter_groups_by_prefecture
   end
 
   def show
@@ -54,12 +56,10 @@ class Admin::GroupsController < ApplicationController
 
   # グループ検索
   def search
-    if params[:keyword].present?
-      @groups = Group.where('name LIKE ?', "%#{params[:keyword]}%")
-    else
-      @groups = Group.all
-    end
-    render :index
+    @groups = Group.all
+    filter_groups_by_name
+    filter_groups_by_prefecture
+    render :index  # indexビューを再利用
   end
 
   # 退会アクション
@@ -78,11 +78,24 @@ class Admin::GroupsController < ApplicationController
 
   # ストロングパラメータ
   def group_params
-    params.require(:group).permit(:name, :address, :leader_id, group_tags_attributes: [:id, :tag_name, :_destroy, :group_id])
+    params.require(:group).permit(:name, :address, :leader_id, :prefecture_id, group_tags_attributes: [:id, :tag_name, :_destroy, :group_id, ])
   end
 
   # グループを設定
   def set_group
     @group = Group.find(params[:id]) # グループを取得
   end
+
+  def filter_groups_by_name
+    if params[:name].present?
+      @groups = @groups.where('name LIKE ?', "%#{params[:name]}%")
+    end
+  end
+
+  def filter_groups_by_prefecture
+    if params[:prefecture_id].present?
+      @groups = @groups.where(prefecture_id: params[:prefecture_id])
+    end
+  end
+
 end

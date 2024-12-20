@@ -68,7 +68,7 @@ class Public::UsersController < ApplicationController
 
   # ユーザー情報の強いパラメーター
   def user_params
-    params.require(:user).permit(:name, :email, :address, :transportation, :role)
+    params.require(:user).permit(:name, :email, :address, :transportation, :role, :prefecture_id)
   end   
 
     # ログインユーザーが管理者または自分の情報のみ編集できるように制限

@@ -26,6 +26,11 @@
       </div>
 
       <div class="mb-3">
+        <%= form.label :prefecture_id, '都道府県' %>
+        <%= form.collection_select :prefecture_id, Prefecture.all, :id, :name, prompt: '都道府県を選択してください' %>
+      </div>
+
+      <div class="mb-3">
         <%= form.label :address, class: 'form-label' %>
         <%= form.text_field :address, class: 'form-control' %>
       </div>
