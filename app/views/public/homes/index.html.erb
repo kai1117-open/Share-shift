@@ -17,7 +17,7 @@
   <%# ユーザーが所属しているグループをすべて表示 %>
   <% if @user_groups.present? && @user_groups.any? %>
     <div class="user-group mb-5">
-      <h2 class="text-primary">あなたのグループ</h2>
+      <h2 class="text-primary">あなたが所属しているグループ</h2>
       <div class="row">
         <% @user_groups.each do |group| %>
           <div class="col-md-6 mb-6">
@@ -58,7 +58,13 @@
           <p class="card-text"><%= post.content.truncate(100) %></p>
           
           <div>
-            <small class="text-muted">投稿者: <%= post.user.name %></small>
+            <small class="text-muted">
+            投稿者: <%= post.user.name %>
+          <% if post.user.status? %>
+          <% else %>
+          <span class="required">※退会済み</span>
+          <% end %>
+            </small>
           </div>
           <div class="d-flex justify-content-between">
             <% if current_user == post.user %>

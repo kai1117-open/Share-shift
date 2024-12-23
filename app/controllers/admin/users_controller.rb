@@ -88,6 +88,6 @@ class Admin::UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :role, :leader, :address, :transportation, :status)
+    params.require(:user).permit(:name, :email, :role, :leader, :address, :transportation, :status, :prefecture_id)
   end
 end

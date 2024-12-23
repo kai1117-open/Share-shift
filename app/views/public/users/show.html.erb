@@ -38,7 +38,7 @@
   <% end %>
     <p><strong>交通手段:</strong> <%= @user.transportation_name %></p>
     <p><strong>役職:</strong> <%= @user.role_name %></p>
-    <p><strong>状態:</strong> <%= @user.status ? '有効' : '無効' %></p>
+    <p><strong>入会状態:</strong> <%= @user.status ? '有効' : '退会済み' %></p>
   </div>
 
   <div class="d-flex justify-content-between">

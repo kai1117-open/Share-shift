@@ -34,11 +34,11 @@
         <%= form.label :address, class: 'form-label' %>
         <%= form.text_field :address, class: 'form-control' %>
       </div>
-
       <div class="mb-3">
-        <%= form.label :transportation, class: 'form-label' %>
-        <%= form.select :transportation, options_for_select([['徒歩', 'walking'], ['自転車', 'bicycle'], ['自家用車', 'car'], ['公共交通機関', 'train']], params[:transportation]), { class: 'form-control' } %>
-      </div>
+      <%= form.label :transportation, "交通手段", class: "form-label" %><span class="required">
+      <%= form.select :transportation, options_for_select([['徒歩', 'walking'], ['自転車', 'bicycle'], ['自家用車', 'car'], ['公共交通機関', 'train']], @user.transportation), { class: 'form-control' } %>
+    </div>
+
 
       <div class="d-grid gap-2">
         <%= form.submit '更新', class: 'btn btn-primary' %>
@@ -47,12 +47,23 @@
     <% end %>
   </div>
 
+  
   <div class="mt-3">
   <div class="d-flex justify-content-between">
-    <%= link_to '退会する', withdraw_public_user_path, method: :post, data: { confirm: '本当に退会しますか？' }, class: 'btn btn-danger' %>
+    <% if @user.leader? %>
+      <span>リーダーに任命されているユーザーは退会できません。退会の場合は上長へ相談してください。</span>
+      <% if @is_leader_in_any_group %>
+        <% @leader_groups.each do |group| %>
+          <span>リーダーをしている店舗: <%= group.name %></span><br>
+        <% end %>
+      <% end %>
+    <% else %>
+      <%= link_to '退会する', withdraw_public_user_path, method: :post, data: { confirm: '本当に退会しますか？' }, class: 'btn btn-danger' %>
+    <% end %>
     <%= link_to '戻る', request.referer || public_user_path(@user), class: 'btn btn-secondary' %>
-    </div>
   </div>
+</div>
+
 </div>
 
 

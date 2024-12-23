@@ -4,7 +4,9 @@
   <div class="row justify-content-center">
     <div class="col-md-6">
       <%= form_with model: @user, url: admin_user_path(@user), method: :patch do |form| %>
-        
+        <% if @user.email == "guest@example.com" %>
+        <h1 class="text-center">ゲストログイン用のアカウントです。</br>編集できません。</h1>
+        <% else %>
         <table class="table">
           <tbody>
             <!-- 名前 -->
@@ -28,6 +30,7 @@
             <tr>
             <td><%= form.label :leader, 'リーダー' %></td>
             <td>
+
               <% if @is_leader_in_any_group %>
                 <!-- ユーザーがリーダーの場合、ラジオボタンを表示して編集できないようにする -->
                 <div class="form-check form-check-inline">
@@ -39,10 +42,10 @@
                   <%= form.label :leader, '一般ユーザー', class: 'form-check-label' %>
                 </div>
                 <div>
+                <div class="alert alert-danger mt-2">
+                <span>リーダーをしている店舗があるため編集できません</span><br>
+                </div>
                 <% @leader_groups.each do |group| %>
-                  <div class="alert alert-danger mt-2">
-                  <span>リーダーをしている店舗があるため編集できません</span><br>
-                  </div>
                   <span>リーダーをしている店舗: <%= group.name %></span><br>
                 <% end %>
               </div>
@@ -57,8 +60,15 @@
                   <%= form.label :leader, '一般ユーザー', class: 'form-check-label' %>
                 </div>
               <% end %>
+              
             </td>
           </tr>
+
+          <tr>
+            <td><%= form.label :prefecture_id, '都道府県' %></td>
+            <td><%= form.collection_select :prefecture_id, Prefecture.all, :id, :name, prompt: '都道府県を選択してください' %></td>
+          </tr>
+
 
             <!-- 住所 -->
             <tr>
@@ -76,7 +86,7 @@
             <tr>
             <td><%= form.label :status, 'ステータス' %></td>
             <td>
-              <% if @is_leader_in_any_group %>
+              <% if @user.leader? %>
                 <!-- ユーザーがリーダーの場合、ステータスを表示して編集できないようにする -->
                 <div class="form-check form-check-inline">
                   <%= form.radio_button :status, true, class: 'form-check-input', disabled: true %>
@@ -89,7 +99,7 @@
           
                 <!-- リーダーをしている店舗がある場合のエラーメッセージを赤く表示 -->
                 <div class="alert alert-danger mt-2">
-                  <span>リーダーをしている店舗があるためステータスを変更できません</span>
+                  <span>リーダーをしているので退会できません。</br>一度リーダーを解除してから退会可能です</span>
                 </div>
                 
               <% else %>
@@ -105,15 +115,18 @@
               <% end %>
             </td>
           </tr>
-
-
           </tbody>
         </table>
+<% end %>
 
+        
         <!-- ボタンの配置（左右） -->
         <div class="d-flex justify-content-between">
           <div>
+          <% if @user.email == "guest@example.com" %>
+          <% else %>
             <%= form.submit '更新', class: 'btn btn-primary mt-3' %>
+          <% end %>
           </div>
           <div>
             <%= link_to '戻る',  request.referer || admin_user_path(@user), class: 'btn btn-secondary mt-3' %>

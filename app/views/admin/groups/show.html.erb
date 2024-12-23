@@ -13,6 +13,10 @@
           <td><%= @group.name %></td>
         </tr>
         <tr>
+          <th>都道府県</th>
+          <td><%= @group.prefecture.name %></td>
+        </tr>
+        <tr>
           <th>住所</th>
           <td><%= @group.address %></td>
         </tr>
@@ -54,7 +58,13 @@
             <tbody>
               <% @group.users.each do |user| %>
                 <tr>
-                  <td><%= link_to user.name, admin_user_path(user), class: 'btn btn-outline-primary' %></td>
+                <td>
+                  <%= link_to user.name, admin_user_path(user), class: 'btn btn-outline-primary' %>
+                  <% if user.status? %>
+                <% else %>
+                  <span class="required">※退会済み</span>
+                <% end %>
+                </td>
                   <td><%= user.email %></td>
                   <td>
                     <%= link_to '退会', leave_user_admin_group_path(@group, user), method: :delete, data: { confirm: '管理者では入会させることはできないので取り消しは困難ですが退会させますか' }, class: 'btn btn-warning btn-sm' %>
