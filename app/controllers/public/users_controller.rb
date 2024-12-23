@@ -10,9 +10,7 @@ class Public::UsersController < ApplicationController
     @users = @users.where.not(email: 'guest@example.com')
     # 検索条件があればフィルタリング
     if params[:search].present?
-      @users = @users.joins(:groups) # グループを結合
-                      .where('users.name LIKE ? OR groups.name LIKE ?', "%#{params[:search]}%", "%#{params[:search]}%")
-                      .distinct # 重複したユーザーを排除
+      @users = @users.where('users.name LIKE ?', "%#{params[:search]}%") # ユーザー名のみで検索
     end
   end
 

@@ -4,8 +4,8 @@
   <!-- 検索フォーム -->
   <%= form_with(url: public_users_path, method: :get, class: 'mb-4') do %>
     <div class="form-group">
-      <%= label_tag :search, '検索条件（名前または所属グループ名）' %>
-      <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: '名前または所属グループ名で検索' %>
+      <%= label_tag :search, '' %>
+      <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: '調べたいユーザー名を検索できます' %>
     </div>
     <%= submit_tag '検索', class: 'btn btn-primary' %>
   <% end %>
