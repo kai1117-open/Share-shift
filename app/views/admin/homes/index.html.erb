@@ -40,7 +40,13 @@
       <% if @users.present? %>
         <% @users.each do |user| %>
           <tr>
-            <td><%= user.name %></td>
+            <td>
+            <%= user.name %>
+            <% if user.status? %>
+            <% else %>
+            <span class="required">※退会済み</span>
+            <% end %>
+            </td>
             <td><%= user.email %></td>
             <td><%= user.leader ? 'リーダー' : '一般ユーザー' %></td>
             <td>
@@ -122,7 +128,13 @@
         <tr>
           <td><%= post.title %></td>
           <td><%= truncate(post.content, length: 50) %></td> <!-- 内容が長い場合は50文字に制限 -->
-          <td><%= post.user.name %></td>
+          <td>
+          <%= post.user.name %>
+          <% if post.user.status? %>
+          <% else %>
+          <span class="required">※退会済み</span>
+          <% end %>
+          </td>
           <td class="text-center">
             <%= link_to '詳細', admin_post_path(post), class: 'btn btn-info btn-sm' %>
             <%= link_to '編集', edit_admin_post_path(post), class: 'btn btn-warning btn-sm' %>
