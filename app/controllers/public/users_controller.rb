@@ -7,7 +7,7 @@ class Public::UsersController < ApplicationController
   # ユーザー一覧
   def index
     @users = User.includes(:groups) # ユーザーと関連するグループを取得
-
+    @users = @users.where.not(email: 'guest@example.com')
     # 検索条件があればフィルタリング
     if params[:search].present?
       @users = @users.joins(:groups) # グループを結合
@@ -26,6 +26,14 @@ class Public::UsersController < ApplicationController
     if current_user != @user
       redirect_to public_user_path(current_user), alert: '他のユーザーの情報は編集できません。'
     end
+
+    @is_leader_in_any_group = user_leader_in_any_group?(@user)
+    @leader_groups = Group.where(leader_id: @user.id)
+
+  end
+
+  def user_leader_in_any_group?(user)
+    Group.exists?(leader_id: user.id)
   end
 
   # ユーザー更新処理

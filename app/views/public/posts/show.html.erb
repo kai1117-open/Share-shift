@@ -8,7 +8,13 @@
             <h1 class="card-title"><%= @post.title %></h1>
           </div>
           <div class="card-body">
-            <p><strong>投稿者:</strong> <%= link_to @post.user.name, public_user_path(@post.user), class: 'text-decoration-none text-primary' %></p>
+            <p><strong>投稿者:</strong> 
+            <%= link_to @post.user.name, public_user_path(@post.user), class: 'text-decoration-none text-primary' %>
+            <% if @post.user.status? %>
+            <% else %>
+            <span class="required">※退会済み</span>
+            <% end %>
+            </p>
             <p><strong>内容:</strong> <%= @post.content %></p>
           </div>
           <div class="card-footer d-flex justify-content-between">

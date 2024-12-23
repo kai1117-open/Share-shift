@@ -61,7 +61,13 @@
             <tbody>
               <% @group.users.each do |user| %>
                 <tr>
-                  <td><%= link_to user.name, public_user_path(user), class: 'btn btn-outline-primary' %></td>
+                  <td>
+                  <%= link_to user.name, public_user_path(user), class: 'btn btn-outline-primary' %>
+                  <% if user.status? %>
+                  <% else %>
+                  <span class="required">※退会済み</span>
+                  <% end %>
+                  </td>
                 </tr>
               <% end %>
             </tbody>

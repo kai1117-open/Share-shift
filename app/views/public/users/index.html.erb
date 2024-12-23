@@ -23,7 +23,13 @@
     <tbody>
       <% @users.each do |user| %>
         <tr>
-          <td><%= user.name %></td>
+          <td>
+          <%= user.name %>
+          <% if user.status? %>
+          <% else %>
+          <span class="required">※退会済み</span>
+          <% end %>
+          </td>
           <td>
             <% if user.groups.any? %>
               <%= user.groups.first.name %> <!-- 所属しているグループ名を表示 -->

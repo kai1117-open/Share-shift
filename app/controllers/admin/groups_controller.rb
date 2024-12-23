@@ -39,7 +39,16 @@ class Admin::GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     if @group.save
-      redirect_to admin_groups_path, notice: 'グループが作成されました。'
+      # リーダーをグループに参加させる
+      leader = User.find(@group.leader_id)
+      membership = GroupMembership.new(user: leader, group: @group)
+      if membership.save
+        redirect_to admin_groups_path, notice: 'グループが作成され、リーダーを参加させました。'
+      else
+        # 参加処理が失敗した場合
+        flash[:alert] = 'グループは作成されましたが、リーダーの参加に失敗しました。'
+        redirect_to admin_groups_path
+      end
     else
       @users = User.all
       flash.now[:alert] = @group.errors.full_messages.join(", ")
