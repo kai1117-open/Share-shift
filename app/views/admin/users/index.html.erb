@@ -6,6 +6,7 @@
       <tr>
         <th>名前</th>
         <th>メールアドレス</th>
+        <th>役職</th>
         <th>リーダー</th>
         <th>所属グループ</th>
         <th>リーダー状態のグループ</th>
@@ -23,6 +24,7 @@
           <% end %>
           </td>
           <td><%= user.email %></td>
+          <td><%= user.role_name %></td>
           <td><%= user.leader ? 'リーダー' : '一般ユーザー' %></td>
           <td>
             <% if user.groups.any? %>
