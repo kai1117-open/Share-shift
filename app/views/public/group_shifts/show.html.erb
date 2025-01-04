@@ -20,4 +20,50 @@
     <%= link_to '削除', public_group_group_shift_path(@shift.group_id, @shift.id), method: :delete, data: { confirm: '本当に削除してもよろしいですか？' }, class: 'btn btn-danger' %>
     <% end %> 
   </div>
+
+  <table class="table table-bordered mt-3">
+  <thead>
+    <tr>
+      <th>参加者名</th>
+      <th>シフト開始時間</th>
+      <th>シフト終了時間</th>
+      <th>シフトステータス</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @member_shifts.present? %>
+      <% @member_shifts.each do |shift| %>
+        <tr>
+          <td>
+            <% if shift.user.present? %>
+              <%= link_to shift.user.name, public_user_path(shift.user), class: 'btn btn-outline-primary' %>
+              <% unless shift.user.status? %>
+                <span class="required">※退会済み</span>
+              <% end %>
+            <% else %>
+              <span class="text-danger">ユーザー情報なし</span>
+            <% end %>
+          </td>
+          <td>
+            <%= shift.shift_start_time.strftime('%Y-%m-%d %H:%M') %>
+          </td>
+          <td>
+            <%= shift.shift_end_time.strftime('%Y-%m-%d %H:%M') %>
+          </td>
+          <td>
+            <%= shift.status_name %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr class="text-center">
+        <td colspan="4" class="text-danger">出勤無し</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+
+
 </div>

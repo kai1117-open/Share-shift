@@ -14,6 +14,8 @@ class Public::GroupShiftsController < ApplicationController
   end
 
   def show
+  # 参加者のシフトの中から @shift.start_time と同じ start_time を持つものを取得
+  @member_shifts = Shift.includes(user: :groups).where(groups: { id: @group.id }, shift_start_time: @shift.shift_start_time)
   end
 
   # シフト作成フォーム
