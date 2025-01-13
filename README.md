@@ -18,8 +18,14 @@
 - エリアの各店舗の中で人手が足りていない日を確認したい時
 
 ## 設計書
-​
+・画面遷移図(UIFlows)
+https://drive.google.com/file/d/1Nhlh3JREDio69Go1WnPjvf7RIVN12uFK/view?usp=sharing
+・​ER図
 https://drive.google.com/file/d/1oocvUSpwRR4zw5spEgPzIDNMzGqUM683/view?usp=sharing
+・テーブル定義書
+https://docs.google.com/spreadsheets/d/1SYwjLatYDbU_DbDMx9oH8AZjBIQci7Z-RtcLlgsOtZs/edit?usp=sharing
+・アプリケーション詳細設計書
+https://docs.google.com/spreadsheets/d/1JTuzsrWjWNxz_b-ouUUZYB791QWa7Z60TpA3pXG0wW4/edit?usp=sharing
 
 
 ## 開発環境
