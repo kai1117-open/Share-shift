@@ -18,7 +18,10 @@
 - エリアの各店舗の中で人手が足りていない日を確認したい時
 
 ## 設計書
-​後ほど作成予定
+​
+https://drive.google.com/file/d/1oocvUSpwRR4zw5spEgPzIDNMzGqUM683/view?usp=sharing
+
+
 ## 開発環境
 - OS：Linux(CentOS)
 - 言語：HTML,CSS,JavaScript,Ruby,SQL
