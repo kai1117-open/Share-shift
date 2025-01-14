@@ -33,10 +33,10 @@
 ---
 
 ## 開発環境
-- **OS**: Linux (CentOS)
+- **OS**: Amazon Linux 2
 - **言語**: HTML, CSS, JavaScript, Ruby, SQL
 - **フレームワーク**: Ruby on Rails
 - **JSライブラリ**: jQuery
-- **IDE**: Cloud9
+- **IDE**: Visual Studio Code
 
 ​
