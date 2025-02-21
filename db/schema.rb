@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(version: 2024_12_20_012949) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "content"
-    t.integer "group_id"
+    t.bigint "group_id"
     t.index ["group_id"], name: "index_group_tags_on_group_id"
   end
 
@@ -124,7 +124,6 @@ ActiveRecord::Schema.define(version: 2024_12_20_012949) do
     t.string "comment"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index "\"shift_date\"", name: "index_shifts_on_shift_date"
     t.index ["user_id"], name: "index_shifts_on_user_id"
   end
 
