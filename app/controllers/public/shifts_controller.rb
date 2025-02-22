@@ -40,7 +40,8 @@ class Public::ShiftsController < ApplicationController
     if @shift.save
       redirect_to public_user_shifts_path(@user), notice: 'シフトが正常に作成されました。'
     else
-      render :index
+      flash[:alert] = @shift.errors.full_messages.join(", ")
+      redirect_to public_user_shifts_path(@user)
     end
   end
 

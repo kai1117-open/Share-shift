@@ -31,7 +31,8 @@ class Public::GroupShiftsController < ApplicationController
     if @group_shift.save
       redirect_to public_group_group_shifts_path(@group), notice: 'シフトが追加されました。'
     else
-      render :new
+      flash[:alert] = @group_shift.errors.full_messages.join(", ")
+      redirect_to public_group_group_shifts_path(@group)
     end
   end
 

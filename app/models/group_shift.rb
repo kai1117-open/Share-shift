@@ -3,7 +3,7 @@ class GroupShift < ApplicationRecord
   validates :shift_start_time, presence: true
   validates :shift_end_time, presence: true
   validates :status, presence: true
-  
+  validate :end_time_after_start_time
   enum status: { unavailable: 0, desired: 1, overstaffed: 2 }
 
   def status_name
@@ -16,6 +16,12 @@ class GroupShift < ApplicationRecord
       "人員過多"
     else
       "不明"
+    end
+  end
+
+  def end_time_after_start_time
+    if shift_end_time.present? && shift_start_time.present? && shift_end_time <= shift_start_time
+      errors.add(:shift_end_time, "は開始時間より後に設定してください。")
     end
   end
 
